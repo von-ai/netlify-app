@@ -1,0 +1,25 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "trackflix-17998",
+          "appId": "1:97468882781:android:943032eac02451972b52b4",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "trackflix-17998",
+          "configurations": {
+            "android": "1:97468882781:android:943032eac02451972b52b4",
+            "ios": "1:97468882781:ios:ee66eeeb4b12003e2b52b4",
+            "macos": "1:97468882781:ios:ee66eeeb4b12003e2b52b4",
+            "web": "1:97468882781:web:61539953f1f6675c2b52b4",
+            "windows": "1:97468882781:web:2b9700ba031d2d4f2b52b4"
+          }
+        }
+      }
+    }
+  }
+}
