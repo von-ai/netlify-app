@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "97468882781",
+    "project_id": "trackflix-17998",
+    "storage_bucket": "trackflix-17998.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:97468882781:android:943032eac02451972b52b4",
+        "android_client_info": {
+          "package_name": "com.example.project_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZgvnQFSpm9ZB3hfg5QQwtcWzHO55teo4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
