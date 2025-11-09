@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class NavBarProvider with ChangeNotifier {
+class NavBarProvider extends ChangeNotifier {
   int _selectedIndex = 0;
+
   int get selectedIndex => _selectedIndex;
 
   void setIndex(int index) {

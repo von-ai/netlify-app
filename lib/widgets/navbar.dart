@@ -20,9 +20,10 @@ class NavBar extends StatelessWidget {
       const ProfilPage(),
     ];
 
-    return Scaffold(
+    return SafeArea(
+      child: Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(child: pages[navBarProvider.selectedIndex]),
+      body: pages[navBarProvider.selectedIndex],
       bottomNavigationBar: Container(
         color: Colors.black,
         child: Padding(
@@ -42,7 +43,8 @@ class NavBar extends StatelessWidget {
             selectedIndex: navBarProvider.selectedIndex,
             onTabChange: (value) {
               navBarProvider.setIndex(value);
-            },
+              },
+            ),
           ),
         ),
       ),
