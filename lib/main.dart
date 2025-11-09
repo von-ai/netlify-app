@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'core/theme/app_theme.dart';
+import 'pages/home.dart';
 import 'package:provider/provider.dart';
 import 'providers/navbar_provider.dart';
 import 'widgets/navbar.dart';
@@ -19,6 +21,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Watch List App',
+      theme: AppTheme.darkTheme,
+      home: Home(),
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: NavBar(), // penting: panggil NavBar di sini
