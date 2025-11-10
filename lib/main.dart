@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
-import 'pages/home.dart';
 import 'package:provider/provider.dart';
 import 'providers/navbar_provider.dart';
 import 'widgets/navbar.dart';
@@ -8,9 +7,7 @@ import 'widgets/navbar.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => NavBarProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => NavBarProvider())],
       child: const MyApp(),
     ),
   );
@@ -25,10 +22,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Watch List App',
       theme: AppTheme.darkTheme,
-      home: Home(),
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: NavBar(), // penting: panggil NavBar di sini
+      home: NavBar(),
+      // penting: panggil NavBar di sini
     );
   }
 }
