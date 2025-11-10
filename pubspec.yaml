@@ -38,6 +38,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   firebase_auth: ^6.1.2
   provider: ^6.1.5+1
+  line_icons: ^2.0.1
+  google_nav_bar: ^5.0.6
 
 dev_dependencies:
   flutter_test:
@@ -67,7 +69,6 @@ flutter:
         - asset: assets/fonts/SpotifyMix-Extrabold.ttf
           weight: 800
 
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
@@ -93,5 +94,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-
-  

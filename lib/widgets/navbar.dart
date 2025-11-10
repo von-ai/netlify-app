@@ -6,6 +6,7 @@ import '../providers/navbar_provider.dart';
 import '../pages/home_page.dart';
 import '../pages/daftar_page.dart';
 import '../pages/profil_page.dart';
+import '../core/theme/colors.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -22,27 +23,30 @@ class NavBar extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-      backgroundColor: Colors.black,
-      body: pages[navBarProvider.selectedIndex],
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
-          child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: const Color.fromRGBO(30, 215, 96, 100),
-            gap: 8,
-            padding: const EdgeInsets.all(16),
-            tabs: const [
-              GButton(icon: LineIcons.home, text: 'Home'),
-              GButton(icon: LineIcons.list, text: 'List'),
-              GButton(icon: LineIcons.user, text: 'Profile'),
-            ],
-            selectedIndex: navBarProvider.selectedIndex,
-            onTabChange: (value) {
-              navBarProvider.setIndex(value);
+        backgroundColor: AppColors.background,
+        body: pages[navBarProvider.selectedIndex],
+        bottomNavigationBar: Container(
+          color: AppColors.background,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15.0,
+              vertical: 20.0,
+            ),
+            child: GNav(
+              backgroundColor: AppColors.background,
+              color: AppColors.textDark,
+              activeColor: AppColors.textDark,
+              tabBackgroundColor: AppColors.primary,
+              gap: 8,
+              padding: const EdgeInsets.all(16),
+              tabs: const [
+                GButton(icon: LineIcons.home, text: 'Home'),
+                GButton(icon: LineIcons.list, text: 'List'),
+                GButton(icon: LineIcons.user, text: 'Profile'),
+              ],
+              selectedIndex: navBarProvider.selectedIndex,
+              onTabChange: (value) {
+                navBarProvider.setIndex(value);
               },
             ),
           ),
