@@ -42,18 +42,22 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text('Selamat Datang,',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'SpotifyMix',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16)),
-                      Text('User!',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'SpotifyMix',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,)),
+                      Text(
+                        'Selamat Datang,',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Text(
+                        'User!',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -67,24 +71,28 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 24),
 
               // Bagian Akan Ditonton
-              const Text('Akan Ditonton',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'SpotifyMix',
-                      fontWeight: FontWeight.bold)),
+              const Text(
+                'Akan Ditonton',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               EventCardList(items: akanDitonton),
 
               const SizedBox(height: 24),
 
               // Bagian Baru Ditambahkan
-              const Text('Baru Ditambahkan',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'SpotifyMix',
-                      fontWeight: FontWeight.bold)),
+              const Text(
+                'Baru Ditambahkan',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               EventCardList(items: baruDitambahkan),
             ],

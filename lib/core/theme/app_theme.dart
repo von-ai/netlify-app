@@ -9,6 +9,7 @@ class AppTheme {
       brightness: Brightness.dark,
     ),
     scaffoldBackgroundColor: AppColors.background,
+    fontFamily: 'SpotifyMix',
     textTheme: const TextTheme(
       bodyLarge: TextStyle(fontSize: 16, color: AppColors.textDark),
       titleLarge: TextStyle(
