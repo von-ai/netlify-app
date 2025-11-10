@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/providers/daftar_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'providers/navbar_provider.dart';
@@ -7,7 +8,10 @@ import 'widgets/navbar.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => NavBarProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavBarProvider()),
+        ChangeNotifierProvider(create: (_) => DaftarProvider()),
+      ],
       child: const MyApp(),
     ),
   );
