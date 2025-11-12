@@ -89,18 +89,36 @@ class _Onboarding extends State<Onboarding> {
                 ),
               ),
             ),
+            // Spacer(),
+            SizedBox(height: MediaQuery.of(context).size.height / 6),
             Text(
               'Or Log In with',
-              style: TextStyle(color: AppColors.textDark, fontSize: 18),
+              style: TextStyle(
+                color: AppColors.textDark,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-            Row(
-              children: [
-                Container(
-                  decoration: BoxDecoration(color: AppColors.textDark),
-                  child: Image.asset('icons/google.png', width: 25, height: 25),
-                ),
-              ],
+            // Row(
+            SizedBox(height: 20),
+            //   children: [
+            Container(
+              margin: EdgeInsets.only(left: 30, right: 30),
+              padding: EdgeInsets.only(top: 12, bottom: 12),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: AppColors.textDark,
+                borderRadius: BorderRadius.circular(60),
+              ),
+              child: Image.asset(
+                'assets/icons/google.png',
+                width: 25,
+                height: 25,
+                // fit: BoxFit.cover,
+              ),
             ),
+            // ],
+            // ),
           ],
         ),
       ),
