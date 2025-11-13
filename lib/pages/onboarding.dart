@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
+import 'register_page.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -69,26 +70,38 @@ class _Onboarding extends State<Onboarding> {
                 ),
               ),
             ),
+
             SizedBox(height: 10),
-            Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Center(
-                child: Text(
-                  'Sign Up',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+
+            InkWell(
+              borderRadius: BorderRadius.circular(30),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => RegisterPage()),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  child: Text(
+                    'Sign Up',
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
             ),
+
             // Spacer(),
             SizedBox(height: MediaQuery.of(context).size.height / 6),
             Text(
