@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -12,17 +14,34 @@ class RegisterProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<String?> register(String email, String password) async {
+  Future<String?> register(
+    String username,
+    String email,
+    String password,
+  ) async {
     _setLoading(true);
     try {
-      await _auth.createUserWithEmailAndPassword(
+      // REGISTER USER
+      final result = await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
       );
+
+      final uid = result.user!.uid;
+
+      // SAVE TO FIRESTORE
+      await _db.collection("users").doc(uid).set({
+        "uid": uid,
+        "username": username.trim(),
+        "email": email.trim(),
+        "created_at": DateTime.now(),
+      });
+
       _setLoading(false);
       return null;
     } on FirebaseAuthException catch (e) {
       _setLoading(false);
+
       if (e.code == 'weak-password') {
         return 'Password terlalu lemah.';
       } else if (e.code == 'email-already-in-use') {

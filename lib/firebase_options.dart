@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'trackflix-17998.firebasestorage.app',
     measurementId: 'G-5K57KBFW7Q',
   );
+
 }
