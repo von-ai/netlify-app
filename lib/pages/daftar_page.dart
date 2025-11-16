@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:project_mobile/core/theme/colors.dart';
+import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:project_mobile/providers/daftar_provider.dart';
 import 'package:project_mobile/widgets/card_list.dart';
 import 'package:project_mobile/widgets/searchbar.dart';
@@ -29,10 +31,17 @@ class _DaftarPageState extends State<DaftarPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DaftarProvider>(context);
+    final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: const Text('Watch List'), centerTitle: true),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: AppColors.textDark),
+            onPressed: () {navBarProvider.setIndex(0);},
+        ),
+        title: const Text('Watch List'), 
+        centerTitle: true),
         backgroundColor: Colors.black,
         body: Padding(
           padding: const EdgeInsets.all(16),
