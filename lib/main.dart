@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mobile/firebase_options.dart';
 import 'package:project_mobile/pages/onboarding.dart';
-// import 'package:project_mobile/widgets/navbar.dart';
+import 'package:project_mobile/providers/signin_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'providers/navbar_provider.dart';
@@ -19,6 +19,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => NavBarProvider()),
         ChangeNotifierProvider(create: (_) => DaftarProvider()),
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
+        ChangeNotifierProvider(create: (_) => SigninProvider()),
       ],
       child: const MyApp(),
     ),

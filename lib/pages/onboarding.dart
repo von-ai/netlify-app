@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
-import 'register_page.dart';
+import 'package:project_mobile/pages/register_page.dart';
+import 'package:project_mobile/pages/signin_page.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -50,22 +51,31 @@ class _Onboarding extends State<Onboarding> {
             ),
 
             SizedBox(height: 20),
-            Container(
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.only(left: 30, right: 30),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: AppColors.textDark,
-                border: Border.all(color: AppColors.textDark),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Center(
-                child: Text(
-                  'Sign In',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+            InkWell(
+              borderRadius: BorderRadius.circular(30),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => SignInPage()),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(left: 30, right: 30),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: AppColors.textDark,
+                  border: Border.all(color: AppColors.textDark),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
