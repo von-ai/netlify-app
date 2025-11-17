@@ -27,7 +27,6 @@ class RegisterPage extends StatelessWidget {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                // USERNAME
                 TextFormField(
                   controller: _usernameController,
                   style: const TextStyle(color: Colors.white),
@@ -44,7 +43,6 @@ class RegisterPage extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // EMAIL
                 TextFormField(
                   controller: _emailController,
                   style: const TextStyle(color: Colors.white),
@@ -61,7 +59,6 @@ class RegisterPage extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // PASSWORD
                 TextFormField(
                   controller: _passwordController,
                   obscureText: true,
@@ -79,7 +76,6 @@ class RegisterPage extends StatelessWidget {
 
                 const SizedBox(height: 16),
 
-                // CONFIRM PASSWORD
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
