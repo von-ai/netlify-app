@@ -84,7 +84,7 @@ class ProfilPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // --- FOTO PROFIL ---
+            // FOTO PROFIL
             Stack(
               children: [
                 SizedBox(
@@ -104,7 +104,7 @@ class ProfilPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // --- Tombol Edit di Foto ---
+                // TOMBOL EDIT
                 Positioned(
                   bottom: 0,
                   right: 0,
