@@ -15,38 +15,31 @@ class SigninProvider with ChangeNotifier {
   Future<String?> login(String email, String password) async {
     _setLoading(true);
     try {
-      // LOGIKA LOGIN
       await _auth.signInWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
       );
 
       _setLoading(false);
-      return null; // null berarti sukses
+      return null;
       
     } on FirebaseAuthException catch (e) {
       _setLoading(false);
 
-      // Tangani error login
       if (e.code == 'user-not-found' || 
           e.code == 'wrong-password' || 
-          e.code == 'INVALID_LOGIN_CREDENTIALS') { // Kode error baru
+          e.code == 'INVALID_LOGIN_CREDENTIALS') {
         return 'Email atau password salah.';
       } 
       else if (e.code == 'invalid-email') {
         return 'Format email tidak valid.';
       } 
       else {
-        // ---- INI BAGIAN PENTING YANG BARU ----
-        // Jangan kembalikan "Terjadi kesalahan", tapi kembalikan KODE errornya
         return 'Error: ${e.code}'; 
-        // ------------------------------------
       }
     } catch (e) {
       _setLoading(false);
-      // ---- INI JUGA PENTING ----
-      return e.toString(); // Tampilkan error penuh
-      // --------------------------
+      return e.toString();
     }
   }
 }
