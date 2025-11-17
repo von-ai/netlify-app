@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project_mobile/pages/onboarding.dart';
-import 'package:project_mobile/widgets/auth_wrapper.dart';
 import 'package:project_mobile/widgets/profile_menu.dart'; 
 import 'package:project_mobile/core/theme/colors.dart'; 
 import 'package:project_mobile/providers/navbar_provider.dart'; 
@@ -55,13 +53,9 @@ class ProfilPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            if (FirebaseAuth.instance.currentUser == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             return Center(
-                child: Text("Terjadi kesalahan saat memuat data.",
-                    style: TextStyle(color: AppColors.textDark)));
+                child: Text("Terjadi kesalahan",
+                    style: TextStyle(color: AppColors.textDark))); 
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return _buildProfileUI(context, "Nama...", "email...",
@@ -187,7 +181,6 @@ class ProfilPage extends StatelessWidget {
               textColor: Colors.red, 
               endIcon: false,
               onPress: () {
-                Provider.of<NavBarProvider>(context, listen: false).setIndex(0);
                 FirebaseAuth.instance.signOut();
               },
             ),

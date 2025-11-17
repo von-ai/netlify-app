@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_mobile/pages/home_page.dart';
 import 'package:project_mobile/pages/onboarding.dart';
-import 'package:provider/provider.dart';
-import 'package:project_mobile/providers/navbar_provider.dart';
-import 'package:project_mobile/widgets/navbar.dart';
 
 class AuthWrapper extends StatelessWidget {
   const AuthWrapper({super.key});
@@ -29,9 +27,9 @@ class AuthWrapper extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
-          return ChangeNotifierProvider(create: (_) => NavBarProvider());
+          return const HomePage(); // atau HomePage(), terserah nama file kamu
         } else {
-          return Onboarding();
+          return const Onboarding();
         }
       },
     );

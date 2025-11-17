@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mobile/firebase_options.dart';
+import 'package:project_mobile/pages/onboarding.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:project_mobile/providers/signin_provider.dart';
 import 'core/theme/app_theme.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Watch List App',
       theme: AppTheme.darkTheme,
-      home: const AuthWrapper(),
+      home: const Onboarding(),
     );
   }
 }
