@@ -8,7 +8,7 @@ import 'core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'providers/daftar_provider.dart';
 import 'package:project_mobile/providers/register_provider.dart';
-import 'package:project_mobile/widgets/auth_wrapper.dart';
+// import 'package:project_mobile/widgets/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Watch List App',
+      title: 'Netlify',
       theme: AppTheme.darkTheme,
       home: const Onboarding(),
     );
