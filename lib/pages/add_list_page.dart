@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:project_mobile/core/theme/colors.dart';
 import 'package:provider/provider.dart';
 import '../models/watch_item.dart';
 import '../providers/watchlist_providers.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class AddListPage extends StatefulWidget {
   const AddListPage({super.key});
@@ -17,7 +17,7 @@ class _AddListPageState extends State<AddListPage> {
   final _type = TextEditingController();
   final _genre = TextEditingController();
   final _date = TextEditingController();
-  bool isWatched = false;
+  final _episodes = TextEditingController();
 
   @override
   void dispose() {
@@ -25,6 +25,7 @@ class _AddListPageState extends State<AddListPage> {
     _type.dispose();
     _genre.dispose();
     _date.dispose();
+    _episodes.dispose();
     super.dispose();
   }
 
@@ -45,6 +46,8 @@ class _AddListPageState extends State<AddListPage> {
               _field(_genre, "Genre"),
               const SizedBox(height: 16),
               _field(_date, "When you want to watch"),
+              const SizedBox(height: 16),
+              _field(_episodes, "Episodes", requiredField: false), // optional
               const SizedBox(height: 24),
 
               ElevatedButton(
@@ -55,19 +58,19 @@ class _AddListPageState extends State<AddListPage> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     final newItem = WatchItem(
-                      id: "",
                       title: _title.text,
                       type: _type.text,
                       genre: _genre.text,
                       date: _date.text,
-                      isWatched: isWatched,
+                      isWatched: false,
+                      episodes: _episodes.text.isEmpty
+                          ? null
+                          : int.tryParse(_episodes.text),
                     );
 
                     await context.read<WatchlistProvider>().add(newItem);
 
-                    if (!mounted) {
-                      return;
-                    }
+                    if (!mounted) return;
                     Navigator.pop(context);
                   }
                 },
@@ -80,14 +83,20 @@ class _AddListPageState extends State<AddListPage> {
     );
   }
 
-  Widget _field(TextEditingController c, String label) {
+  Widget _field(
+    TextEditingController c,
+    String label, {
+    bool requiredField = true,
+  }) {
     return TextFormField(
       controller: c,
       decoration: InputDecoration(
         labelText: label,
         border: const OutlineInputBorder(),
       ),
-      validator: (v) => v!.isEmpty ? "$label tidak boleh kosong" : null,
+      validator: requiredField
+          ? (v) => v!.isEmpty ? "$label tidak boleh kosong" : null
+          : null,
     );
   }
 }

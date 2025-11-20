@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/watch_item.dart';
 
 class WatchlistService {
-  final CollectionReference _collection = FirebaseFirestore.instance.collection(
-    'watchlist',
-  );
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+
+  String get userId => _auth.currentUser!.uid;
+
+  CollectionReference get _collection =>
+      _firestore.collection('users').doc(userId).collection('watchlist');
 
   Future<void> addItem(WatchItem item) async {
     await _collection.add(item.toMap());
