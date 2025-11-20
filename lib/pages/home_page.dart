@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
+import 'package:project_mobile/pages/add_list_page.dart';
 import '../widgets/add_event.dart';
 import '../widgets/event_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,10 +17,11 @@ class _HomePageState extends State<HomePage> {
   List<String> akanDitonton = ["Naruto", "One Piece", "Attack on Titan"];
   List<String> baruDitambahkan = [];
 
-  void tambahAcara() {
-    setState(() {
-      baruDitambahkan.add("Film Baru ${baruDitambahkan.length + 1}");
-    });
+  void tambahAcara(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AddListPage()),
+    );
   }
 
   @override
@@ -38,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                   const CircleAvatar(
                     radius: 25,
                     backgroundColor: Colors.white24,
-                    child: Icon(Icons.person, color: Colors.white, size: 30)
+                    child: Icon(Icons.person, color: Colors.white, size: 30),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -54,15 +56,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                       StreamBuilder<DocumentSnapshot>(
                         stream: FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(user?.uid)
-                          .snapshots(),
+                            .collection('users')
+                            .doc(user?.uid)
+                            .snapshots(),
 
                         builder: (context, snapshot) {
                           String username = 'User';
 
                           if (snapshot.hasData && snapshot.data!.exists) {
-                            var data = snapshot.data!.data() as Map<String, dynamic>;
+                            var data =
+                                snapshot.data!.data() as Map<String, dynamic>;
                             username = data['username'] ?? 'User';
                           }
                           return Text(
@@ -82,7 +85,7 @@ class _HomePageState extends State<HomePage> {
 
               const SizedBox(height: 24),
 
-              Center(child: AddButton(onPressed: tambahAcara)),
+              Center(child: AddButton(onPressed: () => tambahAcara(context))),
 
               const SizedBox(height: 24),
 

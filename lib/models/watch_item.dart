@@ -1,18 +1,20 @@
 class WatchItem {
-  final String id;
+  final String? id;
   final String title;
   final String type;
   final String genre;
   final String date;
   final bool isWatched;
+  final int? episodes; // optional
 
   WatchItem({
-    required this.id,
+    this.id,
     required this.title,
     required this.type,
-    required this.isWatched,
     required this.genre,
     required this.date,
+    required this.isWatched,
+    this.episodes,
   });
 
   factory WatchItem.fromFirestore(Map<String, dynamic> data, String id) {
@@ -23,16 +25,23 @@ class WatchItem {
       genre: data['genre'] ?? '',
       date: data['date'] ?? '',
       isWatched: data['isWatched'] ?? false,
+      episodes: data['episodes'] ?? 0,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    final Map<String, dynamic> map = {
       'title': title,
       'type': type,
-      'isWatched': isWatched,
-      'date': date,
       'genre': genre,
+      'date': date,
+      'isWatched': isWatched,
     };
+
+    if (episodes != null) {
+      map['episodes'] = episodes;
+    }
+
+    return map;
   }
 }

@@ -4,7 +4,6 @@ import '../models/watch_item.dart';
 class DaftarProvider with ChangeNotifier {
   final List<WatchItem> _items = [
     WatchItem(
-      id: '1',
       title: 'Attack on Titan',
       type: 'Anime',
       genre: 'Action',
@@ -12,7 +11,6 @@ class DaftarProvider with ChangeNotifier {
       isWatched: false,
     ),
     WatchItem(
-      id: '2',
       title: 'One Piece',
       type: 'Anime',
       genre: 'Adventure',
@@ -20,7 +18,6 @@ class DaftarProvider with ChangeNotifier {
       isWatched: false,
     ),
     WatchItem(
-      id: '3',
       title: 'Demon Slayer',
       type: 'Anime',
       genre: 'Action',
@@ -28,7 +25,6 @@ class DaftarProvider with ChangeNotifier {
       isWatched: false,
     ),
     WatchItem(
-      id: '4',
       title: 'Jujutsu Kaisen',
       type: 'Anime',
       genre: 'Action',
@@ -36,7 +32,6 @@ class DaftarProvider with ChangeNotifier {
       isWatched: false,
     ),
     WatchItem(
-      id: '5',
       title: 'Frieren',
       type: 'Anime',
       genre: 'Fantasy',

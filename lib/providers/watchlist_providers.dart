@@ -3,46 +3,31 @@ import '../models/watch_item.dart';
 import '../services/watchlist_service.dart';
 
 class WatchlistProvider with ChangeNotifier {
-  final _service = WatchlistService();
-  List<WatchItem> items = [];
-  List<WatchItem> filtered = [];
+  final WatchlistService _service = WatchlistService();
+
+  List<WatchItem> _items = [];
+  List<WatchItem> get items => _items;
 
   WatchlistProvider() {
-    listenToData();
+    _listenToFirestore();
   }
 
-  void listenToData() {
+  void _listenToFirestore() {
     _service.getItems().listen((data) {
-      items = data;
-      filtered = data;
+      _items = data;
       notifyListeners();
     });
-  }
-
-  void search(String query) {
-    if (query.isEmpty) {
-      filtered = items;
-    } else {
-      filtered = items
-          .where(
-            (e) =>
-                e.title.toLowerCase().contains(query.toLowerCase()) ||
-                e.genre.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
-    }
-    notifyListeners();
   }
 
   Future<void> add(WatchItem item) async {
     await _service.addItem(item);
   }
 
-  Future<void> remove(WatchItem item) async {
-    await _service.deleteItem(item.id);
+  Future<void> delete(String id) async {
+    await _service.deleteItem(id);
   }
 
-  Future<void> toggleWatch(WatchItem item) async {
-    await _service.updateWatched(item.id, !item.isWatched);
+  Future<void> updateWatched(String id, bool isWatched) async {
+    await _service.updateWatched(id, isWatched);
   }
 }

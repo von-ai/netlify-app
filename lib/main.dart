@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Netlify',
       theme: AppTheme.darkTheme,
-      home: const AddListPage(),
+      home: const Onboarding(),
     );
   }
 }
