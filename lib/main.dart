@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mobile/firebase_options.dart';
-import 'package:project_mobile/pages/add_list_page.dart';
 import 'package:project_mobile/pages/onboarding.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:project_mobile/providers/signin_provider.dart';
@@ -10,7 +9,6 @@ import 'core/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'providers/daftar_provider.dart';
 import 'package:project_mobile/providers/register_provider.dart';
-// import 'package:project_mobile/widgets/auth_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

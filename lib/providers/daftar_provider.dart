@@ -1,55 +1,51 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import '../models/watch_item.dart';
 
 class DaftarProvider with ChangeNotifier {
-  final List<WatchItem> _items = [
-    WatchItem(
-      title: 'Attack on Titan',
-      type: 'Anime',
-      genre: 'Action',
-      date: '2013',
-      isWatched: false,
-    ),
-    WatchItem(
-      title: 'One Piece',
-      type: 'Anime',
-      genre: 'Adventure',
-      date: '1999',
-      isWatched: false,
-    ),
-    WatchItem(
-      title: 'Demon Slayer',
-      type: 'Anime',
-      genre: 'Action',
-      date: '2019',
-      isWatched: false,
-    ),
-    WatchItem(
-      title: 'Jujutsu Kaisen',
-      type: 'Anime',
-      genre: 'Action',
-      date: '2020',
-      isWatched: false,
-    ),
-    WatchItem(
-      title: 'Frieren',
-      type: 'Anime',
-      genre: 'Fantasy',
-      date: '2023',
-      isWatched: false,
-    ),
-  ];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  List<WatchItem> _items = [];
   List<WatchItem> _filteredItems = [];
-
-  DaftarProvider() {
-    _filteredItems = List.from(_items);
-  }
 
   List<WatchItem> get filteredItems => _filteredItems;
 
+  DaftarProvider() {
+    fetchItems();
+  }
+
+  Future<void> fetchItems() async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) {
+        debugPrint("User belum login.");
+        return;
+      }
+
+      final snapshot = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('watchlist')
+          .get();
+
+      debugPrint("Jumlah data: ${snapshot.docs.length}");
+
+      _items = snapshot.docs
+          .map((doc) => WatchItem.fromFirestore(doc.data(), doc.id))
+          .toList();
+
+      _filteredItems = List.from(_items);
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error fetch data: $e");
+    }
+  }
+
   void search(String query) {
-    if (query.isEmpty) {
+    if (query.trim().isEmpty) {
       _filteredItems = List.from(_items);
     } else {
       _filteredItems = _items
@@ -61,9 +57,53 @@ class DaftarProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeItem(WatchItem item) {
-    _items.remove(item);
-    _filteredItems.remove(item);
-    notifyListeners();
+  Future<void> removeItem(WatchItem item) async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) return;
+
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('watchlist')
+          .doc(item.id)
+          .delete();
+
+      _items.remove(item);
+      _filteredItems.remove(item);
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error delete item: $e");
+    }
+  }
+
+  Future<void> addItem(WatchItem item) async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) return;
+
+      final doc = await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('watchlist')
+          .add(item.toMap());
+
+      final newItem = WatchItem(
+        id: doc.id,
+        title: item.title,
+        type: item.type,
+        genre: item.genre,
+        date: item.date,
+        isWatched: item.isWatched,
+        episodes: item.episodes,
+      );
+
+      _items.add(newItem);
+      _filteredItems = List.from(_items);
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error add item: $e");
+    }
   }
 }
