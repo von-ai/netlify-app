@@ -17,6 +17,25 @@ class WatchItem {
     this.episodes,
   });
 
+  WatchItem copyWith({
+    String? id,
+    String? title,
+    String? type,
+    String? genre,
+    String? date,
+    bool? isWatched,
+    int? episodes,
+  }) {
+    return WatchItem(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      type: type ?? this.type,
+      genre: genre ?? this.genre,
+      date: date ?? this.date,
+      isWatched: isWatched ?? this.isWatched,
+    );
+  }
+
   factory WatchItem.fromFirestore(Map<String, dynamic> data, String id) {
     return WatchItem(
       id: id,

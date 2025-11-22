@@ -2,22 +2,33 @@ import 'package:flutter/foundation.dart';
 import '../models/watch_item.dart';
 import '../services/watchlist_service.dart';
 
-class DetailProvider with ChangeNotifier {
-  final WatchlistService _service = WatchlistService();
+class DetailProvider extends ChangeNotifier {
+  final _service = WatchlistService();
 
-  WatchItem? _item;
-  bool _loading = false;
+  bool loading = false;
+  WatchItem? item;
 
-  WatchItem? get item => _item;
-  bool get loading => _loading;
+  // WatchItem? get item => _item;
+  // bool get loading => _loading;
 
   Future<void> loadDetail(String id) async {
-    _loading = true;
+    loading = true;
     notifyListeners();
 
-    _item = await _service.getItemById(id);
+    item = await _service.getItemById(id);
 
-    _loading = false;
+    loading = false;
+    notifyListeners();
+  }
+
+  Future<void> updateWatchedStatus(String id) async {
+    if (item == null) return;
+
+    final newStatus = !item!.isWatched;
+
+    await _service.updateWatched(id, newStatus);
+
+    item = item!.copyWith(isWatched: newStatus);
     notifyListeners();
   }
 }
