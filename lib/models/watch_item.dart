@@ -5,7 +5,7 @@ class WatchItem {
   final String genre;
   final String date;
   final bool isWatched;
-  final int? episodes; // optional
+  final int? episodes;
 
   WatchItem({
     this.id,

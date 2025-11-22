@@ -76,7 +76,6 @@ class CardList extends StatelessWidget {
                 ),
               ),
 
-              // Tombol delete
               if (onDelete != null)
                 IconButton(
                   onPressed: onDelete,
