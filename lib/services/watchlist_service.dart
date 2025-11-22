@@ -33,4 +33,11 @@ class WatchlistService {
   Future<void> updateWatched(String id, bool isWatched) async {
     await _collection.doc(id).update({"isWatched": isWatched});
   }
+
+  Future<WatchItem?> getItemById(String id) async {
+    final doc = await _collection.doc(id).get();
+    if (!doc.exists) return null;
+
+    return WatchItem.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
+  }
 }

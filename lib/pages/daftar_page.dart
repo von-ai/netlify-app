@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/pages/detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
@@ -65,8 +66,11 @@ class _DaftarPageState extends State<DaftarPage> {
                       genre: item.genre,
                       date: item.date,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Kamu memilih ${item.title}')),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPage(id: item.id!),
+                          ),
                         );
                       },
                       onDelete: () {
