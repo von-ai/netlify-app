@@ -38,6 +38,21 @@ class DetailPage extends StatelessWidget {
                   isWatched: item.isWatched,
                   episodes: item.episodes,
                 ),
+                const SizedBox(height: 24),
+
+                ElevatedButton(
+                  onPressed: () async {
+                    await context.read<DetailProvider>().updateWatchedStatus(
+                      id,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Yey kamu udah nonton!")),
+                    );
+                  },
+                  child: Text(
+                    item.isWatched ? "Sudah ditonton" : "Kamu udah nonton?",
+                  ),
+                ),
               ],
             );
           },
