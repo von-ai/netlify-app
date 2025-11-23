@@ -16,32 +16,23 @@ class DaftarProvider with ChangeNotifier {
     fetchItems();
   }
 
-  Future<void> fetchItems() async {
-    try {
-      final uid = _auth.currentUser?.uid;
-      if (uid == null) {
-        debugPrint("User belum login.");
-        return;
-      }
+  void fetchItems() {
+    final uid = _auth.currentUser?.uid;
+    if (uid == null) return;
 
-      final snapshot = await _firestore
-          .collection('users')
-          .doc(uid)
-          .collection('watchlist')
-          .get();
+    _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('watchlist')
+        .snapshots()
+        .listen((snapshot) {
+          _items = snapshot.docs
+              .map((doc) => WatchItem.fromFirestore(doc.data(), doc.id))
+              .toList();
 
-      debugPrint("Jumlah data: ${snapshot.docs.length}");
-
-      _items = snapshot.docs
-          .map((doc) => WatchItem.fromFirestore(doc.data(), doc.id))
-          .toList();
-
-      _filteredItems = List.from(_items);
-
-      notifyListeners();
-    } catch (e) {
-      debugPrint("Error fetch data: $e");
-    }
+          _filteredItems = List.from(_items);
+          notifyListeners();
+        });
   }
 
   void search(String query) {
