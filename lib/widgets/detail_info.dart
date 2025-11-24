@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/colors.dart';
 
 class DetailInfo extends StatelessWidget {
   final String genre;
@@ -11,38 +12,60 @@ class DetailInfo extends StatelessWidget {
     required this.genre,
     required this.date,
     required this.isWatched,
-    required this.episodes,
+    this.episodes,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _row("Genre", genre),
-            _row("Tanggal", date),
-            _row("Status", isWatched ? "Sudah ditonton" : "Belum"),
-            if (episodes != null) _row("Episodes", episodes.toString()),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.03),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.08)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _infoRow("Genre", genre),
+          const SizedBox(height: 12),
+          _infoRow("Tanggal Rilis", date),
+          const SizedBox(height: 12),
+          _infoRow(
+            "Status",
+            isWatched ? "Sudah Ditonton" : "Belum Ditonton",
+            highlight: isWatched,
+          ),
+          if (episodes != null) ...[
+            const SizedBox(height: 12),
+            _infoRow("Total Episode", "$episodes"),
           ],
-        ),
+        ],
       ),
     );
   }
 
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(value),
-        ],
-      ),
+  Widget _infoRow(String label, String value, {bool highlight = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.textDark,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Text(
+          value,
+          style: TextStyle(
+            color: highlight ? AppColors.primary : AppColors.textDark,
+            fontSize: 14,
+            fontWeight: highlight ? FontWeight.bold : FontWeight.normal,
+          ),
+        ),
+      ],
     );
   }
 }

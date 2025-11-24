@@ -31,4 +31,22 @@ class DetailProvider extends ChangeNotifier {
     item = item!.copyWith(isWatched: newStatus);
     notifyListeners();
   }
+
+  Future<void> updateEpisode(String id, int newEpisode) async {
+    if (item == null) return;
+
+    await _service.updateCurrentEpisode(id, newEpisode);
+
+    item = item!.copyWith(currentEpisode: newEpisode);
+    notifyListeners();
+  }
+
+  Future<void> updateMood(String id, String mood) async {
+    if (item == null) return;
+
+    await _service.updateMood(id, mood);
+
+    item = item!.copyWith(mood: mood);
+    notifyListeners();
+  }
 }

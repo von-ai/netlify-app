@@ -6,6 +6,8 @@ class WatchItem {
   final String date;
   final bool isWatched;
   final int? episodes;
+  final int currentEpisode;
+  final String? mood;
 
   WatchItem({
     this.id,
@@ -15,6 +17,8 @@ class WatchItem {
     required this.date,
     required this.isWatched,
     this.episodes,
+    this.currentEpisode = 0,
+    this.mood,
   });
 
   WatchItem copyWith({
@@ -25,6 +29,8 @@ class WatchItem {
     String? date,
     bool? isWatched,
     int? episodes,
+    int? currentEpisode,
+    String? mood,
   }) {
     return WatchItem(
       id: id ?? this.id,
@@ -33,6 +39,9 @@ class WatchItem {
       genre: genre ?? this.genre,
       date: date ?? this.date,
       isWatched: isWatched ?? this.isWatched,
+      episodes: episodes ?? this.episodes,
+      currentEpisode: currentEpisode ?? this.currentEpisode,
+      mood: mood ?? this.mood,
     );
   }
 
@@ -44,23 +53,22 @@ class WatchItem {
       genre: data['genre'] ?? '',
       date: data['date'] ?? '',
       isWatched: data['isWatched'] ?? false,
-      episodes: data['episodes'] ?? 0,
+      episodes: data['episodes'],
+      currentEpisode: data['currentEpisode'] ?? 0,
+      mood: data['mood'] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> map = {
+    return {
       'title': title,
       'type': type,
       'genre': genre,
       'date': date,
       'isWatched': isWatched,
+      'episodes': episodes,
+      'currentEpisode': currentEpisode,
+      'mood': mood,
     };
-
-    if (episodes != null) {
-      map['episodes'] = episodes;
-    }
-
-    return map;
   }
 }
