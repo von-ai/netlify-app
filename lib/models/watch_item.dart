@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class WatchItem {
   final String? id;
   final String title;
@@ -9,6 +11,9 @@ class WatchItem {
   final int currentEpisode;
   final String? mood;
 
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
   WatchItem({
     this.id,
     required this.title,
@@ -19,6 +24,8 @@ class WatchItem {
     this.episodes,
     this.currentEpisode = 0,
     this.mood,
+    this.createdAt,
+    this.updatedAt,
   });
 
   WatchItem copyWith({
@@ -31,6 +38,8 @@ class WatchItem {
     int? episodes,
     int? currentEpisode,
     String? mood,
+    DateTime? createdAt,
+    DateTime? updatedAt,
   }) {
     return WatchItem(
       id: id ?? this.id,
@@ -42,6 +51,8 @@ class WatchItem {
       episodes: episodes ?? this.episodes,
       currentEpisode: currentEpisode ?? this.currentEpisode,
       mood: mood ?? this.mood,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -55,7 +66,15 @@ class WatchItem {
       isWatched: data['isWatched'] ?? false,
       episodes: data['episodes'],
       currentEpisode: data['currentEpisode'] ?? 0,
-      mood: data['mood'] ?? '',
+      mood: data['mood'],
+
+      createdAt: data['createdAt'] is Timestamp
+          ? (data['createdAt'] as Timestamp).toDate()
+          : null,
+
+      updatedAt: data['updatedAt'] is Timestamp
+          ? (data['updatedAt'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -69,6 +88,8 @@ class WatchItem {
       'episodes': episodes,
       'currentEpisode': currentEpisode,
       'mood': mood,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 }

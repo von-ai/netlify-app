@@ -51,7 +51,6 @@ class DetailPage extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // --- Card wrapper agar lebih rapi dan elegan ---
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -70,7 +69,6 @@ class DetailPage extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // Divider halus
                       Divider(
                         color: Colors.white.withOpacity(0.1),
                         thickness: 1,
@@ -89,7 +87,6 @@ class DetailPage extends StatelessWidget {
 
                         const SizedBox(height: 12),
 
-                        // --- Episode Counter Stylish ---
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -161,7 +158,7 @@ class DetailPage extends StatelessWidget {
 
                       const SizedBox(height: 20),
 
-                      // --- Button Modern ---
+                      const SizedBox(height: 20),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
