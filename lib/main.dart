@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mobile/firebase_options.dart';
 import 'package:project_mobile/pages/onboarding.dart';
+// import 'package:project_mobile/providers/home_provider.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:project_mobile/providers/signin_provider.dart';
 import 'package:project_mobile/providers/watchlist_providers.dart';
@@ -22,6 +23,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => SigninProvider()),
         ChangeNotifierProvider(create: (_) => WatchlistProvider()),
+        // ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: const MyApp(),
     ),

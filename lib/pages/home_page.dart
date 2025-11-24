@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/add_list_page.dart';
+import 'package:project_mobile/services/home_service.dart';
+// import 'package:project_mobile/widgets/card_list.dart';
 import '../widgets/add_event.dart';
 import '../widgets/event_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../models/watch_item.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> akanDitonton = ["Naruto", "One Piece", "Attack on Titan"];
-  List<String> baruDitambahkan = [];
-
+  final HomeService _service = HomeService();
   void tambahAcara(BuildContext context) {
     Navigator.push(
       context,
@@ -26,7 +25,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -46,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Selamat Datang,',
                         style: TextStyle(
                           color: Colors.white,
@@ -54,22 +52,23 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 16,
                         ),
                       ),
-                      StreamBuilder<DocumentSnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user?.uid)
-                            .snapshots(),
-
+                      StreamBuilder(
+                        stream: _service.getUserStream(),
                         builder: (context, snapshot) {
-                          String username = 'User';
-
-                          if (snapshot.hasData && snapshot.data!.exists) {
-                            var data =
-                                snapshot.data!.data() as Map<String, dynamic>;
-                            username = data['username'] ?? 'User';
+                          if (!snapshot.hasData) {
+                            return const Text(
+                              "User",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            );
                           }
+                          final data =
+                              snapshot.data!.data() as Map<String, dynamic>;
+                          final name = data['username'] ?? 'User';
                           return Text(
-                            username,
+                            name,
                             style: TextStyle(
                               color: AppColors.textDark,
                               fontWeight: FontWeight.bold,
@@ -82,15 +81,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               ),
-
               const SizedBox(height: 24),
-
               Center(child: AddButton(onPressed: () => tambahAcara(context))),
-
               const SizedBox(height: 24),
-
               const Text(
-                'Akan Ditonton',
+                'Yuk Lanjutkan Tontonanmu',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24,
@@ -98,10 +93,14 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              EventCardList(items: akanDitonton),
-
+              StreamBuilder<List<WatchItem>>(
+                stream: _service.getBaruDiupdate(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox();
+                  return EventCardList(items: snapshot.data!);
+                },
+              ),
               const SizedBox(height: 24),
-
               const Text(
                 'Baru Ditambahkan',
                 style: TextStyle(
@@ -111,7 +110,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 8),
-              EventCardList(items: baruDitambahkan),
+              StreamBuilder<List<WatchItem>>(
+                stream: _service.getBaruDitambahkan(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return const SizedBox();
+                  return EventCardList(items: snapshot.data!);
+                },
+              ),
             ],
           ),
         ),
