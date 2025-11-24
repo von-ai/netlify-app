@@ -40,4 +40,12 @@ class WatchlistService {
 
     return WatchItem.fromFirestore(doc.data() as Map<String, dynamic>, doc.id);
   }
+
+  Future<void> updateCurrentEpisode(String id, int newEpisode) async {
+    await _collection.doc(id).update({"currentEpisode": newEpisode});
+  }
+
+  Future<void> updateMood(String id, String mood) async {
+    await _collection.doc(id).update({"mood": mood});
+  }
 }
