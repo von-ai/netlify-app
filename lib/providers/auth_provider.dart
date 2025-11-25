@@ -1,21 +1,23 @@
-import 'package:flutter/material.dart';
-import 'package:project_mobile/models/user_model.dart';
-import 'package:project_mobile/services/firebase_auth_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:project_mobile/services/auth_service.dart';
 
-class AuthProvider with ChangeNotifier {
+class SigninProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
+
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  Future<bool> login(String email, String password) async {
-    _isLoading = true;
-    notifyListeners();
+  // bool get isLoggedIn => _authService.getCurrentUser() != null;
 
-    final user = UserModel(email: email, password: password);
-    final success = await _authService.login(user);
-
-    _isLoading = false;
+  void _setLoading(bool value) {
+    _isLoading = value;
     notifyListeners();
-    return success;
+  }
+
+  Future<String?> login(String email, String password) async {
+    _setLoading(true);
+    final result = await _authService.signIn(email, password);
+    _setLoading(false);
+    return result;
   }
 }
