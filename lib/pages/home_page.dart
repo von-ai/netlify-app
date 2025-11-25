@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/add_list_page.dart';
 import 'package:project_mobile/services/home_service.dart';
-// import 'package:project_mobile/widgets/card_list.dart';
 import '../widgets/add_event.dart';
 import '../widgets/event_list.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/watch_item.dart';
 
 class HomePage extends StatefulWidget {
