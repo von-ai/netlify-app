@@ -3,146 +3,117 @@ import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/register_page.dart';
 import 'package:project_mobile/pages/signin_page.dart';
 
-class Onboarding extends StatefulWidget {
+class Onboarding extends StatelessWidget {
   const Onboarding({super.key});
 
   @override
-  State<Onboarding> createState() => _Onboarding();
-}
-
-class _Onboarding extends State<Onboarding> {
-  @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
+        height: size.height,
+        width: size.width,
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [AppColors.background, AppColors.background],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Netlify',
-              style: TextStyle(
-                color: AppColors.primary,
-                fontSize: 70,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-
-            Text(
-              'Track Your Series',
-              style: TextStyle(color: AppColors.textDark),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Welcome back',
-              style: TextStyle(
-                color: AppColors.textDark,
-                fontSize: 25,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-
-            SizedBox(height: 20),
-            InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => SignInPage()),
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.only(left: 30, right: 30),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  color: AppColors.textDark,
-                  border: Border.all(color: AppColors.textDark),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: Text(
-                    'Sign In',
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 10),
-
-            InkWell(
-              borderRadius: BorderRadius.circular(30),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => RegisterPage()),
-                );
-              },
-              child: Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.only(left: 30, right: 30),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text(
+                'Netlify',
+                style: TextStyle(
                   color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(30),
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: Center(
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(height: 4),
+              const Text(
+                'Track Your Series',
+                style: TextStyle(color: AppColors.textDark, fontSize: 16),
+              ),
+
+              const SizedBox(height: 28),
+              const Text(
+                'Welcome back',
+                style: TextStyle(
+                  color: AppColors.textDark,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+
+              const SizedBox(height: 40),
+
+              SizedBox(
+                width: double.infinity,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const SignInPage()),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.textDark,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Sign In',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
 
-            // Spacer(),
-            SizedBox(height: MediaQuery.of(context).size.height / 6),
-            Text(
-              'Or Log In with',
-              style: TextStyle(
-                color: AppColors.textDark,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+              const SizedBox(height: 16),
+
+              SizedBox(
+                width: double.infinity,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(30),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => RegisterPage()),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            // Row(
-            SizedBox(height: 20),
-            //   children: [
-            Container(
-              margin: EdgeInsets.only(left: 30, right: 30),
-              padding: EdgeInsets.only(top: 12, bottom: 12),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: AppColors.textDark,
-                borderRadius: BorderRadius.circular(60),
-              ),
-              child: Image.asset(
-                'assets/icons/google.png',
-                width: 25,
-                height: 25,
-                // fit: BoxFit.cover,
-              ),
-            ),
-            // ],
-            // ),
-          ],
+
+              SizedBox(height: size.height * 0.12),
+            ],
+          ),
         ),
       ),
     );
