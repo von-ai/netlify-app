@@ -32,8 +32,11 @@ class InputField extends StatelessWidget {
         prefixIcon: Icon(icon, color: AppColors.primary),
         suffixIcon: suffix,
         filled: true,
-        fillColor: const Color(0xFF1E1E1E),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+        fillColor: const Color(0xFF202020),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }
