@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:project_mobile/pages/onboarding.dart';
-import 'package:project_mobile/widgets/auth_wrapper.dart';
 import 'package:project_mobile/widgets/profile_menu.dart'; 
 import 'package:project_mobile/core/theme/colors.dart'; 
 import 'package:project_mobile/providers/navbar_provider.dart'; 
 import 'package:provider/provider.dart'; 
+import 'package:project_mobile/widgets/logout.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
@@ -15,9 +14,8 @@ class ProfilPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final User? currentUser = FirebaseAuth.instance.currentUser;
-
     final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
-
+    
     if (currentUser == null) {
       return Scaffold(
           backgroundColor: AppColors.background, 
@@ -186,9 +184,10 @@ class ProfilPage extends StatelessWidget {
               icon: Icons.logout,
               textColor: Colors.red, 
               endIcon: false,
-              onPress: () {
-                Provider.of<NavBarProvider>(context, listen: false).setIndex(0);
-                FirebaseAuth.instance.signOut();
+              onPress: () async {
+                final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
+                await Logout().signOut(context);
+                navBarProvider.setIndex(0);
               },
             ),
           ],
