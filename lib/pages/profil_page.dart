@@ -5,6 +5,7 @@ import 'package:project_mobile/widgets/profile_menu.dart';
 import 'package:project_mobile/core/theme/colors.dart'; 
 import 'package:project_mobile/providers/navbar_provider.dart'; 
 import 'package:provider/provider.dart'; 
+import 'package:project_mobile/widgets/logout.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
@@ -13,9 +14,8 @@ class ProfilPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final User? currentUser = FirebaseAuth.instance.currentUser;
-
     final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
-
+    
     if (currentUser == null) {
       return Scaffold(
           backgroundColor: AppColors.background, 
@@ -180,8 +180,15 @@ class ProfilPage extends StatelessWidget {
               icon: Icons.logout,
               textColor: Colors.red, 
               endIcon: false,
+<<<<<<< HEAD
+              onPress: () async {
+                final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
+                await Logout().signOut(context);
+                navBarProvider.setIndex(0);
+=======
               onPress: () {
                 FirebaseAuth.instance.signOut();
+>>>>>>> b4686dcb56054b993d21e12d3eb65d78e81446b0
               },
             ),
           ],
