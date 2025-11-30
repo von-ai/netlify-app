@@ -53,13 +53,9 @@ class ProfilPage extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            if (FirebaseAuth.instance.currentUser == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
             return Center(
-                child: Text("Terjadi kesalahan saat memuat data.",
-                    style: TextStyle(color: AppColors.textDark)));
+                child: Text("Terjadi kesalahan",
+                    style: TextStyle(color: AppColors.textDark))); 
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return _buildProfileUI(context, "Nama...", "email...",
@@ -184,10 +180,15 @@ class ProfilPage extends StatelessWidget {
               icon: Icons.logout,
               textColor: Colors.red, 
               endIcon: false,
+<<<<<<< HEAD
               onPress: () async {
                 final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
                 await Logout().signOut(context);
                 navBarProvider.setIndex(0);
+=======
+              onPress: () {
+                FirebaseAuth.instance.signOut();
+>>>>>>> b4686dcb56054b993d21e12d3eb65d78e81446b0
               },
             ),
           ],

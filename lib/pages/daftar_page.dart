@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/pages/detail_page.dart';
 import 'package:provider/provider.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
@@ -37,11 +38,12 @@ class _DaftarPageState extends State<DaftarPage> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: AppColors.textDark),
-            onPressed: () {navBarProvider.setIndex(0);},
+            icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
+            onPressed: () => navBarProvider.setIndex(0),
+          ),
+          title: const Text('Watch List'),
+          centerTitle: true,
         ),
-        title: const Text('Watch List'), 
-        centerTitle: true),
         backgroundColor: Colors.black,
         body: Padding(
           padding: const EdgeInsets.all(16),
@@ -58,13 +60,21 @@ class _DaftarPageState extends State<DaftarPage> {
                   itemCount: provider.filteredItems.length,
                   itemBuilder: (context, index) {
                     final item = provider.filteredItems[index];
+
                     return CardList(
-                      title: item,
-                      date: '10 November 2025',
+                      title: item.title,
+                      genre: item.genre,
+                      date: item.date,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Kamu memilih $item')),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPage(id: item.id!),
+                          ),
                         );
+                      },
+                      onDelete: () {
+                        provider.removeItem(item);
                       },
                     );
                   },

@@ -1,32 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 
-class CustomTextField extends StatelessWidget {
-  final String label;
-  final bool obscureText;
+class InputField extends StatelessWidget {
   final TextEditingController controller;
+  final String label;
+  final IconData icon;
+  final String? Function(String?)? validator;
+  final bool obscure;
+  final Widget? suffix;
 
-  const CustomTextField({
+  const InputField({
     super.key,
-    required this.label,
-    this.obscureText = false,
     required this.controller,
+    required this.label,
+    required this.icon,
+    this.validator,
+    this.obscure = false,
+    this.suffix,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
-      obscureText: obscureText,
-      style: const TextStyle(color: AppColors.textDark),
+      validator: validator,
+      obscureText: obscure,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: const TextStyle(color: AppColors.textDark),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 2),
+        labelStyle: const TextStyle(color: Colors.white70),
+        prefixIcon: Icon(icon, color: AppColors.primary),
+        suffixIcon: suffix,
+        filled: true,
+        fillColor: const Color(0xFF202020),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide.none,
         ),
       ),
     );

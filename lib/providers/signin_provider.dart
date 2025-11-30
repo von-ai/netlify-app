@@ -6,6 +6,7 @@ class SigninProvider with ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+  bool get isLoggedIn => _auth.currentUser != null;
 
   void _setLoading(bool value) {
     _isLoading = value;
@@ -22,20 +23,17 @@ class SigninProvider with ChangeNotifier {
 
       _setLoading(false);
       return null;
-      
     } on FirebaseAuthException catch (e) {
       _setLoading(false);
 
-      if (e.code == 'user-not-found' || 
-          e.code == 'wrong-password' || 
+      if (e.code == 'user-not-found' ||
+          e.code == 'wrong-password' ||
           e.code == 'INVALID_LOGIN_CREDENTIALS') {
         return 'Email atau password salah.';
-      } 
-      else if (e.code == 'invalid-email') {
+      } else if (e.code == 'invalid-email') {
         return 'Format email tidak valid.';
-      } 
-      else {
-        return 'Error: ${e.code}'; 
+      } else {
+        return 'Error: ${e.code}';
       }
     } catch (e) {
       _setLoading(false);
