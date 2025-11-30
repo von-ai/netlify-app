@@ -1,4 +1,6 @@
+import 'dart:convert'; // PENTING: Untuk decode foto Base64
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Pastikan import ini ada
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/add_list_page.dart';
 import 'package:project_mobile/services/home_service.dart';
@@ -14,6 +16,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeService _service = HomeService();
+
   void tambahAcara(BuildContext context) {
     Navigator.push(
       context,
@@ -25,60 +28,92 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.background,
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Colors.white24,
-                    child: Icon(Icons.person, color: Colors.white, size: 30),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+              
+              // --- HEADER (FOTO + NAMA) ---
+              // StreamBuilder diletakkan di sini agar membungkus Foto & Nama
+              StreamBuilder<DocumentSnapshot>(
+                stream: _service.getUserStream(),
+                builder: (context, snapshot) {
+                  // 1. Siapkan Default Data (Jika Loading/Error)
+                  String username = "User";
+                  String? photoUrl; // Base64 string
+
+                  // 2. Jika Data Ada, update variabel
+                  if (snapshot.hasData && snapshot.data!.exists) {
+                    final data = snapshot.data!.data() as Map<String, dynamic>;
+                    username = data['username'] ?? "User";
+                    photoUrl = data['photoUrl'];
+                  }
+
+                  // 3. Logic Foto Profil (Base64 Decoder)
+                  ImageProvider? imageProvider;
+                  if (photoUrl != null && photoUrl.isNotEmpty) {
+                    try {
+                      imageProvider = MemoryImage(base64Decode(photoUrl));
+                    } catch (e) {
+                      // Jaga-jaga jika format salah, biarkan null biar jadi icon
+                      print("Error decoding image: $e");
+                    }
+                  }
+
+                  return Row(
                     children: [
-                      const Text(
-                        'Selamat Datang,',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                      // --- LINGKARAN FOTO ---
+                      Container(
+                        width: 50, // Sesuaikan ukuran (radius 25 x 2)
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.white24,
+                          shape: BoxShape.circle,
+                          image: imageProvider != null
+                              ? DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
+                        // Jika tidak ada foto, tampilkan Icon Person
+                        child: imageProvider == null
+                            ? const Icon(Icons.person, color: Colors.white, size: 30)
+                            : null,
                       ),
-                      StreamBuilder(
-                        stream: _service.getUserStream(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Text(
-                              "User",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            );
-                          }
-                          final data =
-                              snapshot.data!.data() as Map<String, dynamic>;
-                          final name = data['username'] ?? 'User';
-                          return Text(
-                            name,
+                      
+                      const SizedBox(width: 12),
+                      
+                      // --- TEKS SAMBUTAN & NAMA ---
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Selamat Datang,',
                             style: TextStyle(
-                              color: AppColors.textDark,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            username,
+                            style: TextStyle(
+                              color: AppColors.textDark, // Warna Hijau/Primary kamu
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                ],
+                  );
+                },
               ),
+              // --- AKHIR HEADER ---
+
               const SizedBox(height: 24),
               Center(child: AddButton(onPressed: () => tambahAcara(context))),
               const SizedBox(height: 24),
