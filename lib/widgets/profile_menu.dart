@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class ProfileMenuWidget extends StatelessWidget {
   const ProfileMenuWidget({
@@ -8,6 +9,7 @@ class ProfileMenuWidget extends StatelessWidget {
     required this.onPress,
     this.endIcon = true,
     this.textColor,
+    this.iconColor,
   }) : super(key: key);
 
   final String title;
@@ -15,6 +17,7 @@ class ProfileMenuWidget extends StatelessWidget {
   final VoidCallback onPress;
   final bool endIcon;
   final Color? textColor;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,7 @@ class ProfileMenuWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(100),
           color: Colors.grey.withOpacity(0.1),
         ),
-        child: Icon(icon, color: Colors.blue),
+        child: Icon(icon, color: iconColor ?? AppColors.primary),
       ),
       title: Text(title, style: Theme.of(context).textTheme.bodyLarge?.apply(color: textColor)),
       trailing: endIcon

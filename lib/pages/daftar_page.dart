@@ -44,7 +44,7 @@ class _DaftarPageState extends State<DaftarPage> {
           title: const Text('Watch List'),
           centerTitle: true,
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: AppColors.background,
         body: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

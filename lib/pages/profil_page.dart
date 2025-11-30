@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project_mobile/widgets/profile_menu.dart';
@@ -6,7 +7,8 @@ import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:project_mobile/widgets/logout.dart';
-import 'package:project_mobile/pages/edit_profil.dart';
+// Pastikan nama file ini sesuai dengan file Edit Profile yang kita buat tadi
+import 'package:project_mobile/pages/edit_profil.dart'; 
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
@@ -33,7 +35,6 @@ class ProfilPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        // Tombol kembali
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () {
@@ -61,8 +62,7 @@ class ProfilPage extends StatelessWidget {
                     style: TextStyle(color: AppColors.textDark)));
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return _buildProfileUI(context, "Nama...", "email...",
-                "https://via.placeholder.com/150", AppColors.textDark);
+            return _buildProfileUI(context, "Nama...", "email...", null, AppColors.textDark);
           }
 
           Map<String, dynamic> userData =
@@ -70,8 +70,9 @@ class ProfilPage extends StatelessWidget {
 
           String username = userData['username'] ?? 'Nama Pengguna';
           String email = userData['email'] ?? 'email@example.com';
-          String photoUrl =
-              userData['photoUrl'] ?? 'https://via.placeholder.com/150';
+          
+          // UBAHAN 1: Biarkan null jika tidak ada foto (jangan pakai placeholder link)
+          String? photoUrl = userData['photoUrl']; 
 
           return _buildProfileUI(
               context, username, email, photoUrl, AppColors.textDark);
@@ -80,14 +81,31 @@ class ProfilPage extends StatelessWidget {
     );
   }
 
+  Widget _buildImage(String data) {
+  try {
+    // Coba decode sebagai Base64
+    return Image.memory(
+      base64Decode(data),
+      fit: BoxFit.cover,
+    );
+  } catch (e) {
+    // Kalau gagal (siapa tau data lama masih URL http), coba load network
+    return Image.network(
+      data,
+      fit: BoxFit.cover,
+      errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.white),
+    );
+  }
+}
+
   Widget _buildProfileUI(BuildContext context, String username, String email,
-      String photoUrl, Color textColor) {
+      String? photoUrl, Color textColor) { // UBAHAN 2: Terima String nullable (?)
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // --- FOTO PROFIL (STYLE BARU) ---
+            // --- FOTO PROFIL ---
             Stack(
               children: [
                 Container(
@@ -98,43 +116,19 @@ class ProfilPage extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: ClipOval(
-                    child: Image.network(
-                      photoUrl,
-                      fit: BoxFit.cover,
-                      // Jika gambar error atau placeholder, tampilkan Icon besar
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Colors.white,
-                        );
-                      },
-                      
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return const Center(
-                            child: CircularProgressIndicator(color: AppColors.primary));
-                      },
-                    ),
+                    child: (photoUrl != null && photoUrl.isNotEmpty)
+                        ? _buildImage(photoUrl) // Buat fungsi helper biar rapi
+                        : const Icon(Icons.person, size: 80, color: Colors.white),
                   ),
                 ),
                 
-                // --- TOMBOL EDIT ICON ---
+                // --- TOMBOL EDIT ICON (Hijau) ---
                 Positioned(
                   bottom: 0,
                   right: 0,
                   child: Container(
                     width: 35,
                     height: 35,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.camera_alt,
-                      color: Colors.black,
-                      size: 20,
-                    ),
                   ),
                 ),
               ],
@@ -161,7 +155,6 @@ class ProfilPage extends StatelessWidget {
               width: 200,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigasi ke halaman Edit Profile
                   Navigator.push(
                     context,
                     MaterialPageRoute(
