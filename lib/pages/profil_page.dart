@@ -7,18 +7,17 @@ import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:project_mobile/widgets/logout.dart';
-// Pastikan nama file ini sesuai dengan file Edit Profile yang kita buat tadi
-import 'package:project_mobile/pages/edit_profil.dart'; 
+import 'package:project_mobile/pages/edit_profil.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
 
+  
   @override
   Widget build(BuildContext context) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
 
-    // Cek Login
     if (currentUser == null) {
       return Scaffold(
           backgroundColor: AppColors.background,
@@ -70,9 +69,7 @@ class ProfilPage extends StatelessWidget {
 
           String username = userData['username'] ?? 'Nama Pengguna';
           String email = userData['email'] ?? 'email@example.com';
-          
-          // UBAHAN 1: Biarkan null jika tidak ada foto (jangan pakai placeholder link)
-          String? photoUrl = userData['photoUrl']; 
+          String? photoUrl = userData['photoUrl'];
 
           return _buildProfileUI(
               context, username, email, photoUrl, AppColors.textDark);
@@ -82,30 +79,28 @@ class ProfilPage extends StatelessWidget {
   }
 
   Widget _buildImage(String data) {
-  try {
-    // Coba decode sebagai Base64
-    return Image.memory(
-      base64Decode(data),
-      fit: BoxFit.cover,
-    );
-  } catch (e) {
-    // Kalau gagal (siapa tau data lama masih URL http), coba load network
-    return Image.network(
-      data,
-      fit: BoxFit.cover,
-      errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.white),
-    );
+    try {
+      return Image.memory(
+        base64Decode(data),
+        fit: BoxFit.cover,
+      );
+    } catch (e) {
+      return Image.network(
+        data,
+        fit: BoxFit.cover,
+        errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.white),
+      );
+    }
   }
-}
 
   Widget _buildProfileUI(BuildContext context, String username, String email,
-      String? photoUrl, Color textColor) { // UBAHAN 2: Terima String nullable (?)
+      String? photoUrl, Color textColor) {
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // --- FOTO PROFIL ---
+            // FOTO PROFIL
             Stack(
               children: [
                 Container(
@@ -117,23 +112,25 @@ class ProfilPage extends StatelessWidget {
                   ),
                   child: ClipOval(
                     child: (photoUrl != null && photoUrl.isNotEmpty)
-                        ? _buildImage(photoUrl) // Buat fungsi helper biar rapi
+                        ? _buildImage(photoUrl)
                         : const Icon(Icons.person, size: 80, color: Colors.white),
                   ),
                 ),
-                
-                // --- TOMBOL EDIT ICON (Hijau) ---
                 Positioned(
                   bottom: 0,
                   right: 0,
                   child: Container(
                     width: 35,
                     height: 35,
+                    decoration: const BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.edit, color: Colors.black, size: 20),
                   ),
                 ),
               ],
             ),
-            
             const SizedBox(height: 10),
 
             // NAMA & EMAIL
@@ -171,7 +168,6 @@ class ProfilPage extends StatelessWidget {
                     style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
               ),
             ),
-            
             const SizedBox(height: 30),
             const Divider(color: Colors.white24),
             const SizedBox(height: 10),
@@ -196,12 +192,10 @@ class ProfilPage extends StatelessWidget {
               title: "Logout",
               icon: Icons.logout,
               textColor: Colors.red,
+              iconColor: Colors.red,
               endIcon: false,
-              onPress: () async {
-                final navBarProvider =
-                    Provider.of<NavBarProvider>(context, listen: false);
-                await Logout().signOut(context);
-                navBarProvider.setIndex(0);
+              onPress: () {
+                _showLogoutDialog(context);
               },
             ),
           ],
@@ -210,3 +204,48 @@ class ProfilPage extends StatelessWidget {
     );
   }
 }
+
+  Future<void> _showLogoutDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1A1A1A), 
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          title: const Text(
+            'Konfirmasi Logout',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Apakah Anda yakin ingin keluar dari akun ini?',
+            style: TextStyle(color: Colors.grey),
+          ),
+          actions: <Widget>[
+            
+            TextButton(
+              child: const Text('Batal', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            
+            TextButton(
+              child: const Text(
+                'Ya, Keluar',
+                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () async {
+                Navigator.of(context).pop();
+                final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
+                await Logout().signOut(context);
+                navBarProvider.setIndex(0);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
