@@ -73,8 +73,36 @@ class _DaftarPageState extends State<DaftarPage> {
                           ),
                         );
                       },
-                      onDelete: () {
-                        provider.removeItem(item);
+                      onDelete: () async {
+                        final confirm = await showDialog<bool>(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("Hapus item ini?"),
+                              content: Text(
+                                "Kamu yakin mau menghapus \"${item.title}\" dari daftar?",
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: const Text("Batal"),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: const Text(
+                                    "Hapus",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+
+                        if (confirm == true) {
+                          provider.removeItem(item);
+                        }
                       },
                     );
                   },
