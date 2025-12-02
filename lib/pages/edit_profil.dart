@@ -19,8 +19,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final ImageService _imageService = ImageService();
   
-  String? _base64Image; // Menyimpan string gambar baru
-  String? _currentPhotoData; // Menyimpan string gambar lama dari DB
+  String? _base64Image;
+  String? _currentPhotoData;
 
   bool _isLoading = false;
   User? currentUser = FirebaseAuth.instance.currentUser;
@@ -30,8 +30,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.initState();
     _loadUserData();
   }
-
-  // ... dispose ...
 
   Future<void> _loadUserData() async {
     if (currentUser != null) {
@@ -47,20 +45,17 @@ class _EditProfilePageState extends State<EditProfilePage> {
           setState(() {
             _usernameController.text = data['username'] ?? '';
             _emailController.text = data['email'] ?? currentUser!.email ?? '';
-            _currentPhotoData = data['photoUrl']; // Ini isinya text panjang
+            _currentPhotoData = data['photoUrl'];
           });
         }
       } catch (e) {
-        // handle error
       } finally {
         if (mounted) setState(() => _isLoading = false);
       }
     }
   }
 
-  // AMBIL GAMBAR JADI BASE64
   Future<void> _pickImage() async {
-    // Panggil service yang baru
     String? base64Result = await _imageService.pickImageAsBase64();
     
     if (base64Result != null) {
@@ -75,23 +70,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
     setState(() => _isLoading = true);
 
     try {
-      // Tentukan data foto apa yang mau disimpan
       String? finalPhotoData;
-
       if (_base64Image != null) {
-        // Kasus 1: User pilih foto baru
         finalPhotoData = _base64Image;
-      } else if (_currentPhotoData != null) {
-        // Kasus 2: User tidak ngapa-ngapain (tetap pakai foto lama)
+      } 
+      else if (_currentPhotoData != null) {
         finalPhotoData = _currentPhotoData;
-      } else {
-        // Kasus 3: User menghapus foto (keduanya null)
+      } 
+      else {
         finalPhotoData = null;
       }
 
       Map<String, dynamic> updateData = {
         'username': _usernameController.text.trim(),
-        'photoUrl': finalPhotoData, // Bisa berisi string foto, atau null (terhapus)
+        'photoUrl': finalPhotoData,
       };
 
       await FirebaseFirestore.instance
@@ -114,22 +106,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   void _removePhoto() {
     setState(() {
-      _base64Image = null;       // Hapus foto yang baru dipilih (jika ada)
-      _currentPhotoData = null;  // Hapus foto lama dari tampilan
+      _base64Image = null;
+      _currentPhotoData = null;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // ... Bagian Scaffold UI SAMA SAJA ...
-    // ... Langsung ke logic tampilan foto ...
-    
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Edit Profile"), // pendekin biar cepat
+        title: const Text("Edit Profile"),
         centerTitle: true,
         backgroundColor: AppColors.background,
         leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
@@ -141,7 +130,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
             children: [
               Center(child: _profilePictureSection()),
               const SizedBox(height: 24),
-              // ... Form username email sama saja ...
                _cardContainer(
                   child: Form(
                     key: _formKey,
@@ -161,11 +149,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  // WIDGET FOTO (LOGIC BASE64)
   Widget _profilePictureSection() {
     ImageProvider? imageProvider;
 
-    // Logic Preview
     if (_base64Image != null) {
       imageProvider = MemoryImage(base64Decode(_base64Image!));
     } else if (_currentPhotoData != null && _currentPhotoData!.isNotEmpty) {
@@ -175,14 +161,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         imageProvider = NetworkImage(_currentPhotoData!);
       }
     }
-
-    // Cek apakah sedang ada foto (untuk menentukan tombol hapus muncul/tidak)
     bool hasPhoto = imageProvider != null;
 
     return Center(
       child: Stack(
         children: [
-          // 1. Lingkaran Foto
           Container(
             width: 120,
             height: 120,
@@ -198,7 +181,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 : null,
           ),
 
-          // 2. Tombol Kamera (Kanan Bawah)
           Positioned(
             bottom: 0,
             right: 0,
@@ -208,7 +190,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 width: 35,
                 height: 35,
                 decoration: const BoxDecoration(
-                  color: AppColors.primary, // Hijau
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.camera_alt, color: Colors.black, size: 20),
@@ -216,20 +198,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ),
 
-          // 3. Tombol Hapus / Sampah (Kiri Bawah) - HANYA MUNCUL JIKA ADA FOTO
           if (hasPhoto)
             Positioned(
               bottom: 0,
               left: 0,
               child: GestureDetector(
-                onTap: _removePhoto, // Panggil fungsi hapus
+                onTap: _removePhoto, 
                 child: Container(
                   width: 35,
                   height: 35,
                   decoration: BoxDecoration(
-                    color: Colors.red[400], // Merah
+                    color: Colors.red[400],
                     shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.background, width: 2), // Biar ada jarak dikit
+                    border: Border.all(color: AppColors.background, width: 2),
                   ),
                   child: const Icon(Icons.delete, color: Colors.white, size: 20),
                 ),
@@ -240,7 +221,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  // ... (Helper Widget _cardContainer, _field, _submitButton copy dari sebelumnya) ...
   Widget _cardContainer({required Widget child}) {
     return Container(
       padding: const EdgeInsets.all(20),

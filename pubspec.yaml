@@ -46,6 +46,7 @@ dependencies:
   flutter_screenutil: ^5.9.3
   intl: ^0.18.1
   image_picker: ^1.2.1
+  shared_preferences: ^2.5.3
   
 
 dev_dependencies:
