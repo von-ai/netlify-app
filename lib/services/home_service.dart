@@ -10,16 +10,10 @@ class HomeService {
   CollectionReference get _watchlist =>
       _db.collection("users").doc(_uid).collection("watchlist");
 
-  // -----------------------------------------------------------
-  // STREAM USER DATA
-  // -----------------------------------------------------------
   Stream<DocumentSnapshot> getUserStream() {
     return _db.collection("users").doc(_uid).snapshots();
   }
 
-  // -----------------------------------------------------------
-  // AMAN: Filter dokumen yang createdAt != null
-  // -----------------------------------------------------------
   Stream<List<WatchItem>> getBaruDitambahkan() {
     return _watchlist
         .where("createdAt", isNotEqualTo: null)
@@ -38,9 +32,6 @@ class HomeService {
         });
   }
 
-  // -----------------------------------------------------------
-  // Barusan Diupdate (Continue Watching)
-  // -----------------------------------------------------------
   Stream<List<WatchItem>> getBaruDiupdate() {
     return _watchlist
         .where("updatedAt", isNotEqualTo: null)
@@ -59,9 +50,6 @@ class HomeService {
         });
   }
 
-  // -----------------------------------------------------------
-  // Update Episode + updatedAt
-  // -----------------------------------------------------------
   Future<void> updateEpisode(String id, int episode) async {
     await _watchlist.doc(id).update({
       "currentEpisode": episode,
@@ -69,15 +57,12 @@ class HomeService {
     });
   }
 
-  // -----------------------------------------------------------
-  // Tambah Item
-  // -----------------------------------------------------------
   Future<void> addItem(Map<String, dynamic> data) async {
-    final now = DateTime.now(); // fallback supaya tidak null
+    final now = DateTime.now();
 
     await _watchlist.add({
       ...data,
-      "createdAt": now, // lebih aman daripada serverTimestamp
+      "createdAt": now,
       "updatedAt": now,
       "currentEpisode": 0,
     });
