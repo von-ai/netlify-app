@@ -1,6 +1,6 @@
-import 'dart:convert'; // PENTING: Untuk decode foto Base64
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Pastikan import ini ada
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/add_list_page.dart';
 import 'package:project_mobile/services/home_service.dart';
@@ -34,39 +34,33 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              
-              // --- HEADER (FOTO + NAMA) ---
-              // StreamBuilder diletakkan di sini agar membungkus Foto & Nama
+            
               StreamBuilder<DocumentSnapshot>(
                 stream: _service.getUserStream(),
                 builder: (context, snapshot) {
-                  // 1. Siapkan Default Data (Jika Loading/Error)
+                
                   String username = "User";
-                  String? photoUrl; // Base64 string
+                  String? photoUrl; 
 
-                  // 2. Jika Data Ada, update variabel
                   if (snapshot.hasData && snapshot.data!.exists) {
                     final data = snapshot.data!.data() as Map<String, dynamic>;
                     username = data['username'] ?? "User";
                     photoUrl = data['photoUrl'];
                   }
 
-                  // 3. Logic Foto Profil (Base64 Decoder)
                   ImageProvider? imageProvider;
                   if (photoUrl != null && photoUrl.isNotEmpty) {
                     try {
                       imageProvider = MemoryImage(base64Decode(photoUrl));
                     } catch (e) {
-                      // Jaga-jaga jika format salah, biarkan null biar jadi icon
                       print("Error decoding image: $e");
                     }
                   }
 
                   return Row(
                     children: [
-                      // --- LINGKARAN FOTO ---
                       Container(
-                        width: 50, // Sesuaikan ukuran (radius 25 x 2)
+                        width: 50,
                         height: 50,
                         decoration: BoxDecoration(
                           color: Colors.white24,
@@ -78,15 +72,13 @@ class _HomePageState extends State<HomePage> {
                                 )
                               : null,
                         ),
-                        // Jika tidak ada foto, tampilkan Icon Person
                         child: imageProvider == null
                             ? const Icon(Icons.person, color: Colors.white, size: 30)
                             : null,
                       ),
                       
                       const SizedBox(width: 12),
-                      
-                      // --- TEKS SAMBUTAN & NAMA ---
+                     
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -101,7 +93,7 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             username,
                             style: TextStyle(
-                              color: AppColors.textDark, // Warna Hijau/Primary kamu
+                              color: AppColors.textDark,
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                             ),
@@ -112,8 +104,7 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              // --- AKHIR HEADER ---
-
+              
               const SizedBox(height: 24),
               Center(child: AddButton(onPressed: () => tambahAcara(context))),
               const SizedBox(height: 24),
