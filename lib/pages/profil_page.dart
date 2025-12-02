@@ -100,7 +100,6 @@ class ProfilPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // FOTO PROFIL
             Stack(
               children: [
                 Container(
@@ -116,24 +115,10 @@ class ProfilPage extends StatelessWidget {
                         : const Icon(Icons.person, size: 80, color: Colors.white),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 35,
-                    height: 35,
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.edit, color: Colors.black, size: 20),
-                  ),
-                ),
               ],
             ),
             const SizedBox(height: 10),
 
-            // NAMA & EMAIL
             Text(username,
                 style: Theme.of(context)
                     .textTheme
@@ -147,7 +132,6 @@ class ProfilPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // TOMBOL EDIT PROFILE
             SizedBox(
               width: 200,
               child: ElevatedButton(
@@ -172,7 +156,6 @@ class ProfilPage extends StatelessWidget {
             const Divider(color: Colors.white24),
             const SizedBox(height: 10),
 
-            // MENU ITEMS
             ProfileMenuWidget(
               title: "Settings",
               icon: Icons.settings,
