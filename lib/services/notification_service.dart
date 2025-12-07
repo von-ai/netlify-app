@@ -6,9 +6,11 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
+  static const int _retentionId = 888888;
+
   Future<void> init() async {
     await AwesomeNotifications().initialize(
-      null,
+      null, // Pastikan icon app sudah di-setup di android/app/src/main/res/drawable
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
@@ -21,7 +23,16 @@ class NotificationService {
           channelShowBadge: true,
           playSound: true,
           criticalAlerts: true,
-        )
+        ),
+        NotificationChannel(
+          channelGroupKey: 'basic_channel_group',
+          channelKey: 'retention_channel',
+          channelName: 'Pengingat Kembali',
+          channelDescription: 'Notifikasi agar user kembali membuka aplikasi',
+          defaultColor: const Color(0xFF9D50DD),
+          ledColor: Colors.white,
+          importance: NotificationImportance.Default,
+        ),
       ],
       debug: true,
     );
@@ -46,7 +57,7 @@ class NotificationService {
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: id,
-        channelKey: 'watchlist_channel',
+        channelKey: 'watchlist_channel', // Masuk ke channel Watchlist
         title: title,
         body: body,
         notificationLayout: NotificationLayout.Default,
@@ -68,36 +79,34 @@ class NotificationService {
     );
   }
 
-  Future<void> scheduleInactivityReminder() async {
-    const int inactivityId = 888888;
-    
-    await AwesomeNotifications().cancel(inactivityId);
-    //set 10 second untuk demo
-    final scheduledTime = DateTime.now().add(const Duration(seconds: 10));
+  Future<void> cancelScheduledRetention() async {
+    await AwesomeNotifications().cancel(_retentionId);
+    debugPrint("User kembali! Notifikasi retention dibatalkan.");
+  }
+
+  Future<void> scheduleAppClosedNotification() async {
+    await AwesomeNotifications().cancel(_retentionId);
+
     String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: inactivityId,
-        channelKey: 'watchlist_channel',
+        id: _retentionId,
+        channelKey: 'retention_channel', // Masuk ke channel Retention
         title: 'Kangen nih! 🥺',
-        body: 'Sudah seminggu gak lanjutin tontonanmu. Ayo nonton sekarang!',
+        body: 'Sudah lama tidak membuka Netlify, Ayo jadwalkan film baru untuk ditonton ',
         notificationLayout: NotificationLayout.Default,
         category: NotificationCategory.Recommendation,
         wakeUpScreen: true,
       ),
-      schedule: NotificationCalendar(
-        year: scheduledTime.year,
-        month: scheduledTime.month,
-        day: scheduledTime.day,
-        hour: scheduledTime.hour,
-        minute: scheduledTime.minute,
-        second: scheduledTime.second,
-        millisecond: 0,
+      schedule: NotificationInterval(
+        interval: const Duration(seconds: 10), // 10 Detik untuk Demo
         timeZone: localTimeZone,
+        repeats: false,
         preciseAlarm: true,
         allowWhileIdle: true,
       ),
     );
+    debugPrint("App closed. Notifikasi dijadwalkan dalam 10 detik.");
   }
 }
