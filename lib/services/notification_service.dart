@@ -99,6 +99,5 @@ class NotificationService {
         allowWhileIdle: true,
       ),
     );
-    debugPrint(">>> SYSTEM: Sukses request ke OS");
   }
 }

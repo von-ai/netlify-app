@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.background,
@@ -88,20 +90,17 @@ class _HomePageState extends State<HomePage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'Selamat Datang,',
-                            style: TextStyle(
+                            style: textTheme.bodyLarge?.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
                             ),
                           ),
                           Text(
                             username,
-                            style: const TextStyle(
+                            style: textTheme.titleLarge?.copyWith(
                               color: AppColors.textDark,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
                             ),
                           ),
                         ],
@@ -115,11 +114,10 @@ class _HomePageState extends State<HomePage> {
               Center(child: AddButton(onPressed: () => tambahAcara(context))),
               const SizedBox(height: 24),
               
-              const Text(
+              Text(
                 'Yuk Lanjutkan Tontonanmu',
-                style: TextStyle(
+                style: textTheme.headlineSmall?.copyWith(
                   color: Colors.white,
-                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -135,11 +133,10 @@ class _HomePageState extends State<HomePage> {
               
               const SizedBox(height: 24),
               
-              const Text(
+              Text(
                 'Baru Ditambahkan',
-                style: TextStyle(
+                style: textTheme.headlineSmall?.copyWith(
                   color: Colors.white,
-                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),

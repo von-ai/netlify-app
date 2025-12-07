@@ -8,22 +8,25 @@ import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:project_mobile/widgets/logout.dart';
 import 'package:project_mobile/pages/edit_profil.dart';
+import 'package:project_mobile/pages/settings_page.dart';
 
 class ProfilPage extends StatelessWidget {
   const ProfilPage({super.key});
 
-  
   @override
   Widget build(BuildContext context) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
     final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
+    final textTheme = Theme.of(context).textTheme;
 
     if (currentUser == null) {
       return Scaffold(
           backgroundColor: AppColors.background,
           body: Center(
               child: Text("Tidak ada pengguna, silakan login.",
-                  style: TextStyle(color: AppColors.textDark))));
+                  style: textTheme.bodyLarge?.copyWith(
+                    color: AppColors.textDark,
+                  ))));
     }
 
     final Stream<DocumentSnapshot> userStream = FirebaseFirestore.instance
@@ -35,16 +38,17 @@ class ProfilPage extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppColors.textDark),
+          icon: const Icon(Icons.arrow_back, color: AppColors.textDark),
           onPressed: () {
             navBarProvider.setIndex(0);
           },
         ),
-        title: Text("Profile",
-            style: Theme.of(context)
-                .textTheme
-                .headlineMedium
-                ?.copyWith(color: AppColors.textDark, fontWeight: FontWeight.bold)),
+        title: Text(
+          "Profile",
+          style: textTheme.titleLarge?.copyWith(
+            color: AppColors.textDark,
+          ),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: AppColors.background,
@@ -53,15 +57,19 @@ class ProfilPage extends StatelessWidget {
         stream: userStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            return const Center(
+                child: CircularProgressIndicator(color: AppColors.primary));
           }
           if (snapshot.hasError) {
             return Center(
                 child: Text("Terjadi kesalahan saat memuat data.",
-                    style: TextStyle(color: AppColors.textDark)));
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: AppColors.textDark,
+                    )));
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return _buildProfileUI(context, "Nama...", "email...", null, AppColors.textDark);
+            return _buildProfileUI(
+                context, "Nama...", "email...", null, AppColors.textDark);
           }
 
           Map<String, dynamic> userData =
@@ -88,13 +96,16 @@ class ProfilPage extends StatelessWidget {
       return Image.network(
         data,
         fit: BoxFit.cover,
-        errorBuilder: (ctx, err, stack) => const Icon(Icons.person, color: Colors.white),
+        errorBuilder: (ctx, err, stack) =>
+            const Icon(Icons.person, color: Colors.white),
       );
     }
   }
 
   Widget _buildProfileUI(BuildContext context, String username, String email,
       String? photoUrl, Color textColor) {
+    final textTheme = Theme.of(context).textTheme;
+
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20.0),
@@ -112,7 +123,8 @@ class ProfilPage extends StatelessWidget {
                   child: ClipOval(
                     child: (photoUrl != null && photoUrl.isNotEmpty)
                         ? _buildImage(photoUrl)
-                        : const Icon(Icons.person, size: 80, color: Colors.white),
+                        : const Icon(Icons.person,
+                            size: 80, color: Colors.white),
                   ),
                 ),
               ],
@@ -120,15 +132,15 @@ class ProfilPage extends StatelessWidget {
             const SizedBox(height: 10),
 
             Text(username,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: textColor, fontWeight: FontWeight.bold)),
+                style: textTheme.titleLarge?.copyWith(
+                  color: textColor,
+                  fontSize: 22,
+                )),
             Text(email,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.grey[500])),
+                style: textTheme.bodyLarge?.copyWith(
+                  color: Colors.grey[500],
+                  fontSize: 14,
+                )),
 
             const SizedBox(height: 20),
 
@@ -148,8 +160,11 @@ class ProfilPage extends StatelessWidget {
                   shape: const StadiumBorder(),
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: const Text("Edit Profile",
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                child: Text("Edit Profile",
+                    style: textTheme.bodyLarge?.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    )),
               ),
             ),
             const SizedBox(height: 30),
@@ -159,15 +174,20 @@ class ProfilPage extends StatelessWidget {
             ProfileMenuWidget(
               title: "Settings",
               icon: Icons.settings,
+              onPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SettingsPage()),
+                );
+              },
+            ),
+            ProfileMenuWidget(
+              title: "About Us",
+              icon: Icons.person,
               onPress: () {},
             ),
             ProfileMenuWidget(
-              title: "User Management",
-              icon: Icons.person_add,
-              onPress: () {},
-            ),
-            ProfileMenuWidget(
-              title: "Information",
+              title: "FAQ",
               icon: Icons.info,
               onPress: () {},
             ),
@@ -188,47 +208,59 @@ class ProfilPage extends StatelessWidget {
   }
 }
 
-  Future<void> _showLogoutDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: const Color(0xFF1A1A1A), 
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(14),
+Future<void> _showLogoutDialog(BuildContext context) async {
+  final textTheme = Theme.of(context).textTheme;
+
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF1A1A1A),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+        ),
+        title: Text(
+          'Konfirmasi Logout',
+          style: textTheme.titleLarge?.copyWith(
+            color: Colors.white,
           ),
-          title: const Text(
-            'Konfirmasi Logout',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'Apakah Anda yakin ingin keluar dari akun ini?',
+          style: textTheme.bodyLarge?.copyWith(
+            color: Colors.grey,
+            fontSize: 14,
           ),
-          content: const Text(
-            'Apakah Anda yakin ingin keluar dari akun ini?',
-            style: TextStyle(color: Colors.grey),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Batal',
+                style: textTheme.bodyLarge?.copyWith(
+                  color: Colors.white,
+                )),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
           ),
-          actions: <Widget>[
-            
-            TextButton(
-              child: const Text('Batal', style: TextStyle(color: Colors.white)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            
-            TextButton(
-              child: const Text(
-                'Ya, Keluar',
-                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          TextButton(
+            child: Text(
+              'Ya, Keluar',
+              style: textTheme.bodyLarge?.copyWith(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
               ),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                final navBarProvider = Provider.of<NavBarProvider>(context, listen: false);
-                await Logout().signOut(context);
-                navBarProvider.setIndex(0);
-              },
             ),
-          ],
-        );
-      },
-    );
-  }
+            onPressed: () async {
+              Navigator.of(context).pop();
+              final navBarProvider =
+                  Provider.of<NavBarProvider>(context, listen: false);
+              await Logout().signOut(context);
+              navBarProvider.setIndex(0);
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

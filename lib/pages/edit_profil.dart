@@ -118,10 +118,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text("Edit Profile"),
+        title: Text(
+          "Edit Profile",
+          style: textTheme.titleLarge?.copyWith(
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: AppColors.background,
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white), 
+          onPressed: () => Navigator.pop(context)
+        ),
       ),
       body: _isLoading 
         ? const Center(child: CircularProgressIndicator())
@@ -233,11 +241,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
      return TextFormField(
           controller: c,
           readOnly: isReadOnly,
-          style: const TextStyle(color: Colors.white),
+          style: t.bodyLarge?.copyWith(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: Icon(i, color: AppColors.primary),
-            filled: true, fillColor: const Color(0xFF1E1E1E),
-            labelText: l, labelStyle: TextStyle(color: Colors.grey),
+            filled: true, 
+            fillColor: const Color(0xFF1E1E1E),
+            labelText: l, 
+            labelStyle: t.bodyMedium?.copyWith(color: Colors.grey),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
           ),
           validator: (v) => v!.isEmpty ? "$l required" : null,
@@ -246,9 +256,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Widget _submitButton(TextTheme t) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, padding: EdgeInsets.all(16)),
+      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, padding: const EdgeInsets.all(16)),
       onPressed: _isLoading ? null : _saveProfile,
-      child: Text("Simpan", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+      child: Text(
+        "Simpan", 
+        style: t.bodyLarge?.copyWith(
+          color: Colors.black, 
+          fontWeight: FontWeight.bold
+        )
+      ),
     );
   }
 }
