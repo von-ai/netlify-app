@@ -12,6 +12,7 @@ import 'package:project_mobile/providers/signin_provider.dart';
 import 'package:project_mobile/providers/watchlist_providers.dart';
 import 'providers/daftar_provider.dart';
 import 'package:project_mobile/providers/register_provider.dart';
+import 'package:project_mobile/providers/editdata_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,6 +38,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => SigninProvider()),
         ChangeNotifierProvider(create: (_) => WatchlistProvider()),
+        ChangeNotifierProvider(create: (_) => EditDataProvider()),
       ],
       child: MyApp(seenOnboarding: seenOnboarding),
     ),

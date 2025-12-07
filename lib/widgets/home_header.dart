@@ -7,11 +7,13 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return StreamBuilder(
       stream: userStream,
       builder: (context, snapshot) {
         final username = snapshot.hasData
-            ? snapshot.data['username'] ?? 'User'
+            ? (snapshot.data as dynamic)['username'] ?? 'User'
             : 'User';
 
         return Row(
@@ -25,16 +27,14 @@ class HomeHeader extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   "Selamat Datang,",
-                  style: TextStyle(color: Colors.white70),
+                  style: textTheme.bodyMedium?.copyWith(color: Colors.white70),
                 ),
                 Text(
                   username,
-                  style: const TextStyle(
+                  style: textTheme.titleLarge?.copyWith(
                     color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
