@@ -31,9 +31,9 @@ class AboutUsPage extends StatelessWidget {
       },
       {
         'name': 'Muh. Aidil Iskandar',
-        'nim': 'NIM: D1212210XX',
-        'github' : '',
-        'image': 'assets/images/creator3.jpg',
+        'nim': 'NIM: D121221094',
+        'github' : 'https://github.com/maidili',
+        'image': 'assets/images/kakAidil.jpg',
       },
     ];
 
