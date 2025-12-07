@@ -4,18 +4,28 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/pages/add_list_page.dart';
 import 'package:project_mobile/services/home_service.dart';
-import '../widgets/add_event.dart';
-import '../widgets/event_list.dart';
-import '../../models/watch_item.dart';
+import 'package:project_mobile/widgets/add_event.dart';
+import 'package:project_mobile/widgets/event_list.dart';
+import 'package:project_mobile/models/watch_item.dart';
+import 'package:project_mobile/services/notification_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final HomeService _service = HomeService();
+  final NotificationService _notificationService = NotificationService();
+
+  @override
+  void initState() {
+    super.initState();
+    _notificationService.init(); 
+    _notificationService.scheduleInactivityReminder();
+  }
 
   void tambahAcara(BuildContext context) {
     Navigator.push(
@@ -34,11 +44,9 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            
               StreamBuilder<DocumentSnapshot>(
                 stream: _service.getUserStream(),
                 builder: (context, snapshot) {
-                
                   String username = "User";
                   String? photoUrl; 
 
@@ -53,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                     try {
                       imageProvider = MemoryImage(base64Decode(photoUrl));
                     } catch (e) {
-                      print("Error decoding image: $e");
+                      debugPrint("Error decoding image: $e");
                     }
                   }
 
@@ -76,9 +84,7 @@ class _HomePageState extends State<HomePage> {
                             ? const Icon(Icons.person, color: Colors.white, size: 30)
                             : null,
                       ),
-                      
                       const SizedBox(width: 12),
-                     
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -92,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           Text(
                             username,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: AppColors.textDark,
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -108,6 +114,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 24),
               Center(child: AddButton(onPressed: () => tambahAcara(context))),
               const SizedBox(height: 24),
+              
               const Text(
                 'Yuk Lanjutkan Tontonanmu',
                 style: TextStyle(
@@ -117,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 8),
+              
               StreamBuilder<List<WatchItem>>(
                 stream: _service.getBaruDiupdate(),
                 builder: (context, snapshot) {
@@ -124,7 +132,9 @@ class _HomePageState extends State<HomePage> {
                   return EventCardList(items: snapshot.data!);
                 },
               ),
+              
               const SizedBox(height: 24),
+              
               const Text(
                 'Baru Ditambahkan',
                 style: TextStyle(
@@ -134,6 +144,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const SizedBox(height: 8),
+              
               StreamBuilder<List<WatchItem>>(
                 stream: _service.getBaruDitambahkan(),
                 builder: (context, snapshot) {
