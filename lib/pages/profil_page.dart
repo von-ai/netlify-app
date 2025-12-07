@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:project_mobile/pages/aboutus_page.dart';
 import 'package:project_mobile/widgets/profile_menu.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
@@ -184,7 +185,12 @@ class ProfilPage extends StatelessWidget {
             ProfileMenuWidget(
               title: "About Us",
               icon: Icons.person,
-              onPress: () {},
+              onPress: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AboutUsPage()),
+                );
+              },
             ),
             ProfileMenuWidget(
               title: "FAQ",
