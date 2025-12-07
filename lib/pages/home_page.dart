@@ -7,7 +7,6 @@ import 'package:project_mobile/services/home_service.dart';
 import 'package:project_mobile/widgets/add_event.dart';
 import 'package:project_mobile/widgets/event_list.dart';
 import 'package:project_mobile/models/watch_item.dart';
-import 'package:project_mobile/services/notification_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +17,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeService _service = HomeService();
-  final NotificationService _notificationService = NotificationService();
-
-  @override
-  void initState() {
-    super.initState();
-    _notificationService.init(); 
-    _notificationService.scheduleInactivityReminder();
-  }
 
   void tambahAcara(BuildContext context) {
     Navigator.push(
