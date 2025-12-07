@@ -1,22 +1,30 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:project_mobile/firebase_options.dart';
+import 'core/theme/app_theme.dart';
+import 'services/auth_gate.dart';
 import 'package:project_mobile/pages/onboarding.dart';
-// import 'package:project_mobile/providers/home_provider.dart';
+import 'package:project_mobile/services/notification_service.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
 import 'package:project_mobile/providers/signin_provider.dart';
 import 'package:project_mobile/providers/watchlist_providers.dart';
-import 'package:provider/provider.dart';
 import 'providers/daftar_provider.dart';
 import 'package:project_mobile/providers/register_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'services/auth_gate.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    
+    await NotificationService().init(); 
+  } catch (e) {
+    debugPrint("Error saat inisialisasi service: $e");
+  }
 
   final prefs = await SharedPreferences.getInstance();
   final bool seenOnboarding = prefs.getBool('seenOnboarding') ?? false;
@@ -29,7 +37,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => RegisterProvider()),
         ChangeNotifierProvider(create: (_) => SigninProvider()),
         ChangeNotifierProvider(create: (_) => WatchlistProvider()),
-        // ChangeNotifierProvider(create: (_) => HomeProvider()),
       ],
       child: MyApp(seenOnboarding: seenOnboarding),
     ),

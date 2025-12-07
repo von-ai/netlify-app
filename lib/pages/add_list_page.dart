@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/watch_item.dart';
 import '../providers/watchlist_providers.dart';
 import 'package:project_mobile/core/theme/colors.dart';
+import '../services/notification_service.dart';
 
 class AddListPage extends StatefulWidget {
   const AddListPage({super.key});
@@ -22,6 +23,9 @@ class _AddListPageState extends State<AddListPage> {
 
   DateTime? selectedDate;
   final dateFormat = DateFormat('yyyy-MM-dd');
+
+  // Instance Notification Service
+  final NotificationService _notifService = NotificationService();
 
   @override
   void dispose() {
@@ -177,7 +181,7 @@ class _AddListPageState extends State<AddListPage> {
     );
   }
 
-  // PICK DATE
+  // FUNGSI PILIH TANGGAL
   Future<void> pickDate() async {
     final now = DateTime.now();
     final result = await showDatePicker(
@@ -198,8 +202,18 @@ class _AddListPageState extends State<AddListPage> {
     }
   }
 
+  // FUNGSI SIMPAN DATA & JADWALKAN NOTIFIKASI
   Future<void> saveData() async {
     if (!_formKey.currentState!.validate()) return;
+    if (selectedDate == null) return;
+
+    bool hasPermission = await _notifService.requestPermission();
+    if (!hasPermission) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Izin ditolak. Alarm tidak akan bunyi.")),
+      );
+    }
 
     final item = WatchItem(
       title: _title.text,
@@ -211,9 +225,45 @@ class _AddListPageState extends State<AddListPage> {
       currentEpisode: 0,
     );
 
+    int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(100000);
     await context.read<WatchlistProvider>().add(item);
+    final now = DateTime.now();
+    DateTime scheduleTime;
+
+    bool isToday = selectedDate!.year == now.year &&
+        selectedDate!.month == now.month &&
+        selectedDate!.day == now.day;
+    //set 10 second untuk demo
+    if (isToday) {
+      scheduleTime = now.add(const Duration(seconds: 10));
+    } else {
+      scheduleTime = DateTime(
+        selectedDate!.year,
+        selectedDate!.month,
+        selectedDate!.day,
+        9, 0, 0, 
+      );
+    }
+
+    if (scheduleTime.isAfter(now) && hasPermission) {
+      await _notifService.scheduleNotification(
+        id: notificationId,
+        title: "Waktunya Nonton! 🎬",
+        body: "Jangan lupa nonton ${_title.text} sesuai jadwalmu.",
+        scheduledTime: scheduleTime,
+      );
+    }
 
     if (!mounted) return;
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            "Disimpan! Pengingat set: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}"),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+
     Navigator.pop(context);
   }
 }
