@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:project_mobile/pages/aboutus_page.dart';
+import 'package:project_mobile/pages/faq_page.dart';
 import 'package:project_mobile/widgets/profile_menu.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import 'package:project_mobile/providers/navbar_provider.dart';
@@ -175,27 +176,18 @@ class ProfilPage extends StatelessWidget {
             ProfileMenuWidget(
               title: "Settings",
               icon: Icons.settings,
-              onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SettingsPage()),
-                );
-              },
+              onPress: () {Navigator.push(context,MaterialPageRoute(builder: (context) => const SettingsPage()),);},
             ),
             ProfileMenuWidget(
               title: "About Us",
               icon: Icons.person,
               onPress: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AboutUsPage()),
-                );
-              },
+                Navigator.push(context,MaterialPageRoute(builder: (context) => const AboutUsPage()),);},
             ),
             ProfileMenuWidget(
               title: "FAQ",
               icon: Icons.info,
-              onPress: () {},
+              onPress: () {Navigator.push(context,MaterialPageRoute(builder: (context) => const FaqPage()),);},
             ),
             ProfileMenuWidget(
               title: "Logout",
