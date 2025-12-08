@@ -10,7 +10,7 @@ class NotificationService {
 
   Future<void> init() async {
     await AwesomeNotifications().initialize(
-      null, // Pastikan icon app sudah di-setup di android/app/src/main/res/drawable
+      'resource://drawable/ic_notification', // Pastikan icon app sudah di-setup di android/app/src/main/res/drawable
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
@@ -41,7 +41,8 @@ class NotificationService {
   Future<bool> requestPermission() async {
     bool isAllowed = await AwesomeNotifications().isNotificationAllowed();
     if (!isAllowed) {
-      isAllowed = await AwesomeNotifications().requestPermissionToSendNotifications();
+      isAllowed = await AwesomeNotifications()
+          .requestPermissionToSendNotifications();
     }
     return isAllowed;
   }
@@ -52,7 +53,8 @@ class NotificationService {
     required String body,
     required DateTime scheduledTime,
   }) async {
-    String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    String localTimeZone = await AwesomeNotifications()
+        .getLocalTimeZoneIdentifier();
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
@@ -87,14 +89,16 @@ class NotificationService {
   Future<void> scheduleAppClosedNotification() async {
     await AwesomeNotifications().cancel(_retentionId);
 
-    String localTimeZone = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    String localTimeZone = await AwesomeNotifications()
+        .getLocalTimeZoneIdentifier();
 
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
         id: _retentionId,
         channelKey: 'retention_channel', // Masuk ke channel Retention
         title: 'Kangen nih! 🥺',
-        body: 'Sudah lama tidak membuka Netlify, Ayo jadwalkan film baru untuk ditonton ',
+        body:
+            'Sudah lama tidak membuka Netlify, Ayo jadwalkan film baru untuk ditonton ',
         notificationLayout: NotificationLayout.Default,
         category: NotificationCategory.Recommendation,
         wakeUpScreen: true,
@@ -102,7 +106,7 @@ class NotificationService {
       schedule: NotificationInterval(
         interval: const Duration(seconds: 10), // 10 Detik untuk Demo
         timeZone: localTimeZone,
-        repeats: false,
+        repeats: true,
         preciseAlarm: true,
         allowWhileIdle: true,
       ),

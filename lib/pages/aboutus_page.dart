@@ -20,19 +20,19 @@ class AboutUsPage extends StatelessWidget {
       {
         'name': 'William Anthony Rustan',
         'nim': 'NIM: D121231006',
-        'github' : 'https://github.com/Chutannn',
-        'image': 'assets/images/will.jpeg', 
+        'github': 'https://github.com/Chutannn',
+        'image': 'assets/images/will.jpeg',
       },
       {
         'name': 'Admiral Zuhdi',
         'nim': 'NIM: D121231021',
-        'github' : 'https://github.com/von-ai',
+        'github': 'https://github.com/von-ai',
         'image': 'assets/images/zuhdi.jpg',
       },
       {
         'name': 'Muh. Aidil Iskandar',
         'nim': 'NIM: D121221094',
-        'github' : 'https://github.com/maidili',
+        'github': 'https://github.com/maidili',
         'image': 'assets/images/kakAidil.jpg',
       },
     ];
@@ -42,9 +42,7 @@ class AboutUsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "About Us",
-          style: textTheme.titleLarge?.copyWith(
-            color: Colors.white,
-          ),
+          style: textTheme.titleLarge?.copyWith(color: Colors.white),
         ),
         centerTitle: true,
         backgroundColor: AppColors.background,
@@ -63,15 +61,17 @@ class AboutUsPage extends StatelessWidget {
             Container(
               width: 120,
               height: 120,
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: AppColors.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: ClipOval(
                 child: Image.asset(
-                  'assets/images/logo.png', 
-                  fit: BoxFit.contain,
+                  'assets/images/LOGO.png',
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     return const Icon(Icons.broken_image, color: Colors.white);
                   },
@@ -89,9 +89,7 @@ class AboutUsPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               "Version 1.0.0",
-              style: textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
-              ),
+              style: textTheme.bodyMedium?.copyWith(color: Colors.grey),
             ),
             const SizedBox(height: 16),
             Text(
@@ -135,14 +133,21 @@ class AboutUsPage extends StatelessWidget {
                       height: 70,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.background, width: 2),
+                        border: Border.all(
+                          color: AppColors.background,
+                          width: 2,
+                        ),
                       ),
                       child: ClipOval(
                         child: Image.asset(
                           creator['image']!,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.person, size: 40, color: Colors.grey);
+                            return const Icon(
+                              Icons.person,
+                              size: 40,
+                              color: Colors.grey,
+                            );
                           },
                         ),
                       ),
@@ -167,13 +172,18 @@ class AboutUsPage extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          if (creator['github'] != null && creator['github']!.isNotEmpty) ...[
+                          if (creator['github'] != null &&
+                              creator['github']!.isNotEmpty) ...[
                             const SizedBox(height: 8),
                             GestureDetector(
                               onTap: () => _launchURL(creator['github']!),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.link, size: 14, color: AppColors.primary),
+                                  const Icon(
+                                    Icons.link,
+                                    size: 14,
+                                    color: AppColors.primary,
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     "Kunjungi GitHub",
@@ -187,7 +197,7 @@ class AboutUsPage extends StatelessWidget {
                                 ],
                               ),
                             ),
-                          ]
+                          ],
                         ],
                       ),
                     ),
@@ -199,9 +209,7 @@ class AboutUsPage extends StatelessWidget {
             const SizedBox(height: 40),
             Text(
               "© 2025 Project Mobile",
-              style: textTheme.bodySmall?.copyWith(
-                color: Colors.white24,
-              ),
+              style: textTheme.bodySmall?.copyWith(color: Colors.white24),
             ),
           ],
         ),
