@@ -10,7 +10,7 @@ class NotificationService {
 
   Future<void> init() async {
     await AwesomeNotifications().initialize(
-      'resource://drawable/ic_notification', // Pastikan icon app sudah di-setup di android/app/src/main/res/drawable
+      'resource://drawable/logo', // Pastikan icon app sudah di-setup di android/app/src/main/res/drawable
       [
         NotificationChannel(
           channelGroupKey: 'basic_channel_group',
@@ -106,7 +106,7 @@ class NotificationService {
       schedule: NotificationInterval(
         interval: const Duration(seconds: 10), // 10 Detik untuk Demo
         timeZone: localTimeZone,
-        repeats: true,
+        repeats: false,
         preciseAlarm: true,
         allowWhileIdle: true,
       ),
