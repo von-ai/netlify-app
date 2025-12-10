@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/core/theme/colors.dart';
+import 'package:project_mobile/pages/register_page.dart';
 import 'package:project_mobile/pages/signin_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -97,7 +98,7 @@ class Onboarding extends StatelessWidget {
                     if (context.mounted) {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const SignInPage()),
+                        MaterialPageRoute(builder: (_) => RegisterPage()),
                       );
                     }
                   },

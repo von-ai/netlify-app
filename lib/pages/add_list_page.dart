@@ -101,7 +101,7 @@ class _AddListPageState extends State<AddListPage> {
             ),
             keyboardType: TextInputType.number,
             validator: (v) {
-              if (v == null || v.isEmpty) return null; // opsional
+              if (v == null || v.isEmpty) return null;
 
               final value = int.tryParse(v);
 
