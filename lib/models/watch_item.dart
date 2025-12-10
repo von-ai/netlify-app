@@ -88,8 +88,15 @@ class WatchItem {
       'episodes': episodes,
       'currentEpisode': currentEpisode,
       'mood': mood,
-      'createdAt': createdAt,
-      'updatedAt': updatedAt,
+
+      // ⬇️ PERBAIKAN PENTING ⬇️
+      'createdAt': createdAt != null
+          ? Timestamp.fromDate(createdAt!)
+          : FieldValue.serverTimestamp(),
+
+      'updatedAt': updatedAt != null
+          ? Timestamp.fromDate(updatedAt!)
+          : FieldValue.serverTimestamp(),
     };
   }
 }

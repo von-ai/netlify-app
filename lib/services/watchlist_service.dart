@@ -31,7 +31,10 @@ class WatchlistService {
   }
 
   Future<void> updateWatched(String id, bool isWatched) async {
-    await _collection.doc(id).update({"isWatched": isWatched});
+    await _collection.doc(id).update({
+      "isWatched": isWatched,
+      "updatedAt": FieldValue.serverTimestamp(),
+    });
   }
 
   Future<WatchItem?> getItemById(String id) async {
@@ -42,10 +45,16 @@ class WatchlistService {
   }
 
   Future<void> updateCurrentEpisode(String id, int newEpisode) async {
-    await _collection.doc(id).update({"currentEpisode": newEpisode});
+    await _collection.doc(id).update({
+      "currentEpisode": newEpisode,
+      "updatedAt": FieldValue.serverTimestamp(),
+    });
   }
 
   Future<void> updateMood(String id, String mood) async {
-    await _collection.doc(id).update({"mood": mood});
+    await _collection.doc(id).update({
+      "mood": mood,
+      "updatedAt": FieldValue.serverTimestamp(),
+    });
   }
 }

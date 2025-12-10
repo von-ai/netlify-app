@@ -36,6 +36,7 @@ class HomeService {
     return _watchlist
         .where("updatedAt", isNotEqualTo: null)
         .orderBy("updatedAt", descending: true)
+        .limit(2)
         .snapshots()
         .map((snap) {
           return snap.docs
