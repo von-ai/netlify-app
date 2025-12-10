@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/watch_item.dart';
-import '../providers/watchlist_providers.dart';
 import 'package:project_mobile/core/theme/colors.dart';
 import '../services/notification_service.dart';
+import '../providers/daftar_provider.dart';
 
 class AddListPage extends StatefulWidget {
   const AddListPage({super.key});
@@ -24,7 +24,6 @@ class _AddListPageState extends State<AddListPage> {
   DateTime? selectedDate;
   final dateFormat = DateFormat('yyyy-MM-dd');
 
-  // Instance Notification Service
   final NotificationService _notifService = NotificationService();
 
   @override
@@ -93,18 +92,34 @@ class _AddListPageState extends State<AddListPage> {
           ),
           const SizedBox(height: 16),
 
-          _field(
-            _episodes,
-            "Total Episode (opsional)",
-            icon: Icons.numbers,
-            requiredField: false,
+          TextFormField(
+            controller: _episodes,
+            style: const TextStyle(color: Colors.white),
+            decoration: _inputDecoration(
+              label: "Total Episode (opsional)",
+              icon: Icons.numbers,
+            ),
+            keyboardType: TextInputType.number,
+            validator: (v) {
+              if (v == null || v.isEmpty) return null; // opsional
+
+              final value = int.tryParse(v);
+
+              if (value == null) {
+                return "Episode harus berupa angka";
+              }
+              if (value <= 0) {
+                return "Episode harus lebih dari 0";
+              }
+
+              return null;
+            },
           ),
         ],
       ),
     );
   }
 
-  // UI HELPERS
   InputDecoration _inputDecoration({
     required String label,
     required IconData icon,
@@ -181,7 +196,6 @@ class _AddListPageState extends State<AddListPage> {
     );
   }
 
-  // FUNGSI PILIH TANGGAL
   Future<void> pickDate() async {
     final now = DateTime.now();
     final result = await showDatePicker(
@@ -202,7 +216,6 @@ class _AddListPageState extends State<AddListPage> {
     }
   }
 
-  // FUNGSI SIMPAN DATA & JADWALKAN NOTIFIKASI
   Future<void> saveData() async {
     if (!_formKey.currentState!.validate()) return;
     if (selectedDate == null) return;
@@ -225,12 +238,15 @@ class _AddListPageState extends State<AddListPage> {
       currentEpisode: 0,
     );
 
-    int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(100000);
-    await context.read<WatchlistProvider>().add(item);
+    int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(
+      100000,
+    );
+    await context.read<DaftarProvider>().addItem(item);
     final now = DateTime.now();
     DateTime scheduleTime;
 
-    bool isToday = selectedDate!.year == now.year &&
+    bool isToday =
+        selectedDate!.year == now.year &&
         selectedDate!.month == now.month &&
         selectedDate!.day == now.day;
     //set 10 second untuk demo
@@ -241,7 +257,9 @@ class _AddListPageState extends State<AddListPage> {
         selectedDate!.year,
         selectedDate!.month,
         selectedDate!.day,
-        9, 0, 0, 
+        9,
+        0,
+        0,
       );
     }
 
@@ -259,7 +277,8 @@ class _AddListPageState extends State<AddListPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-            "Disimpan! Pengingat set: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}"),
+          "Disimpan! FPengingat set: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}",
+        ),
         duration: const Duration(seconds: 3),
       ),
     );
