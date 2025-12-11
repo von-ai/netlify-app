@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import '../models/watch_item.dart';
+import 'package:project_mobile/models/watch_item.dart';
 
 class DaftarProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -58,6 +58,28 @@ class DaftarProvider with ChangeNotifier {
         .doc(uid)
         .collection('watchlist')
         .add(item.toMap());
+  }
+
+  Future<void> updateItem(WatchItem item) async {
+    try {
+      final uid = _auth.currentUser?.uid;
+      if (uid == null) return;
+
+      if ((item.id ?? '').isEmpty) {
+        return;
+      }
+
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('watchlist')
+          .doc(item.id)
+          .update(item.toMap());
+          
+    } catch (e) {
+      debugPrint("Error updating item: $e");
+      rethrow;
+    }
   }
 
   Future<void> removeItem(WatchItem item) async {

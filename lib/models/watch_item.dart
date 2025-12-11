@@ -89,7 +89,6 @@ class WatchItem {
       'currentEpisode': currentEpisode,
       'mood': mood,
 
-      // ⬇️ PERBAIKAN PENTING ⬇️
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
           : FieldValue.serverTimestamp(),

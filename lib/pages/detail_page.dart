@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:project_mobile/widgets/detail_header.dart';
 import 'package:project_mobile/widgets/detail_info.dart';
-import 'package:provider/provider.dart';
-import '../providers/detail_provider.dart';
-import '../core/theme/colors.dart';
+import 'package:project_mobile/pages/add_list_page.dart';
+import 'package:project_mobile/providers/detail_provider.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class DetailPage extends StatelessWidget {
   final String id;
@@ -16,7 +17,6 @@ class DetailPage extends StatelessWidget {
       create: (_) => DetailProvider()..loadDetail(id),
       child: Scaffold(
         backgroundColor: AppColors.background,
-
         appBar: AppBar(
           title: const Text("Detail Acaramu"),
           centerTitle: true,
@@ -24,7 +24,6 @@ class DetailPage extends StatelessWidget {
           elevation: 0,
           foregroundColor: AppColors.textDark,
         ),
-
         body: Consumer<DetailProvider>(
           builder: (context, state, _) {
             if (state.loading) {
@@ -48,9 +47,7 @@ class DetailPage extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 DetailHeader(title: item.title, type: item.type),
-
                 const SizedBox(height: 20),
-
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -65,28 +62,35 @@ class DetailPage extends StatelessWidget {
                         date: item.date,
                         isWatched: item.isWatched,
                         episodes: item.episodes,
+                        onEditPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => AddListPage(itemToEdit: item),
+                            ),
+                          ).then((_) {
+                            if (context.mounted) {
+                              context.read<DetailProvider>().loadDetail(id);
+                            }
+                          });
+                        },
                       ),
-
                       const SizedBox(height: 20),
-
                       Divider(
                         color: Colors.white.withOpacity(0.1),
                         thickness: 1,
                         height: 24,
                       ),
-
                       if (item.episodes != null) ...[
-                        Text(
+                        const Text(
                           "Progress Episode",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             color: AppColors.textDark,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-
                         const SizedBox(height: 12),
-
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -107,9 +111,9 @@ class DetailPage extends StatelessWidget {
                                       : 0;
 
                                   context.read<DetailProvider>().updateEpisode(
-                                    id,
-                                    ep,
-                                  );
+                                        id,
+                                        ep,
+                                      );
                                 },
                                 icon: const Icon(
                                   Icons.remove_circle_outline,
@@ -117,7 +121,6 @@ class DetailPage extends StatelessWidget {
                                   size: 28,
                                 ),
                               ),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 12,
@@ -131,19 +134,18 @@ class DetailPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               IconButton(
                                 padding: EdgeInsets.zero,
                                 onPressed: () {
                                   final ep =
                                       item.currentEpisode < item.episodes!
-                                      ? item.currentEpisode + 1
-                                      : item.currentEpisode;
+                                          ? item.currentEpisode + 1
+                                          : item.currentEpisode;
 
                                   context.read<DetailProvider>().updateEpisode(
-                                    id,
-                                    ep,
-                                  );
+                                        id,
+                                        ep,
+                                      );
                                 },
                                 icon: const Icon(
                                   Icons.add_circle_outline,
@@ -155,10 +157,41 @@ class DetailPage extends StatelessWidget {
                           ),
                         ),
                       ],
-
-                      const SizedBox(height: 20),
-
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.black,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => AddListPage(itemToEdit: item),
+                              ),
+                            ).then((_) {
+                              if (context.mounted) {
+                                context.read<DetailProvider>().loadDetail(id);
+                              }
+                            });
+                          },
+                          child: const Text(
+                            "Edit Data",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -176,13 +209,15 @@ class DetailPage extends StatelessWidget {
                                 .read<DetailProvider>()
                                 .updateWatchedStatus(id);
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Yey kamu udah nonton!"),
-                                backgroundColor: AppColors.primary,
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Status berhasil diupdate!"),
+                                  backgroundColor: AppColors.primary,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
                           },
                           child: Text(
                             item.isWatched
