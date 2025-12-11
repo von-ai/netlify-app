@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/watch_item.dart';
+import 'package:project_mobile/models/watch_item.dart';
 
 class WatchlistService {
   final _firestore = FirebaseFirestore.instance;

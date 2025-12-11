@@ -28,6 +28,7 @@ class HomeService {
                 ),
               )
               .where((item) => item.currentEpisode == 0)
+              .take(2)
               .toList();
         });
   }

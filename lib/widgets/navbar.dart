@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import '../providers/navbar_provider.dart';
-import '../pages/home_page.dart';
-import '../pages/daftar_page.dart';
-import '../pages/profil_page.dart';
-import '../core/theme/colors.dart';
+import 'package:project_mobile/providers/navbar_provider.dart';
+import 'package:project_mobile/pages/home_page.dart';
+import 'package:project_mobile/pages/daftar_page.dart';
+import 'package:project_mobile/pages/profil_page.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});

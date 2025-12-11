@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import '../models/watch_item.dart';
+import 'package:project_mobile/models/watch_item.dart';
 
 class HomeProvider with ChangeNotifier {
   final _firestore = FirebaseFirestore.instance;

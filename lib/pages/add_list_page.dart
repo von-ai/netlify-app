@@ -7,7 +7,6 @@ import 'package:project_mobile/services/notification_service.dart';
 import 'package:project_mobile/providers/daftar_provider.dart';
 
 class AddListPage extends StatefulWidget {
-  // Parameter opsional untuk mode Edit
   final WatchItem? itemToEdit;
 
   const AddListPage({super.key, this.itemToEdit});
