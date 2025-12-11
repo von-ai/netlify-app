@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../models/watch_item.dart';
+import 'package:project_mobile/models/watch_item.dart';
 import 'package:project_mobile/core/theme/colors.dart';
-import '../services/notification_service.dart';
-import '../providers/daftar_provider.dart';
+import 'package:project_mobile/services/notification_service.dart';
+import 'package:project_mobile/providers/daftar_provider.dart';
 
 class AddListPage extends StatefulWidget {
-  const AddListPage({super.key});
+  // Parameter opsional untuk mode Edit
+  final WatchItem? itemToEdit;
+
+  const AddListPage({super.key, this.itemToEdit});
 
   @override
   State<AddListPage> createState() => _AddListPageState();
@@ -16,15 +19,42 @@ class AddListPage extends StatefulWidget {
 class _AddListPageState extends State<AddListPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _title = TextEditingController();
-  final _type = TextEditingController();
-  final _genre = TextEditingController();
-  final _episodes = TextEditingController();
+  late TextEditingController _title;
+  late TextEditingController _type;
+  late TextEditingController _genre;
+  late TextEditingController _episodes;
 
   DateTime? selectedDate;
   final dateFormat = DateFormat('yyyy-MM-dd');
-
   final NotificationService _notifService = NotificationService();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _title = TextEditingController();
+    _type = TextEditingController();
+    _genre = TextEditingController();
+    _episodes = TextEditingController();
+
+    if (widget.itemToEdit != null) {
+      final item = widget.itemToEdit!;
+      
+      _title.text = item.title;
+      _type.text = item.type;
+      _genre.text = item.genre;
+      
+      if (item.episodes != null) {
+        _episodes.text = item.episodes.toString();
+      }
+
+      try {
+        selectedDate = dateFormat.parse(item.date);
+      } catch (e) {
+        selectedDate = DateTime.now();
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -37,20 +67,46 @@ class _AddListPageState extends State<AddListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isEditMode = widget.itemToEdit != null;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tambah Watch List"),
+        title: Text(isEditMode ? "Edit Jadwal" : "Tambah Watch List"),
         centerTitle: true,
         backgroundColor: AppColors.background,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       backgroundColor: AppColors.background,
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (isEditMode) ...[
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline, color: AppColors.primary, size: 20),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      "Mengubah tanggal akan menjadwalkan ulang notifikasi.",
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           _cardContainer([_form()]),
           const SizedBox(height: 24),
-          _submitButton(),
+          _submitButton(isEditMode),
         ],
       ),
     );
@@ -70,7 +126,6 @@ class _AddListPageState extends State<AddListPage> {
           _field(_genre, "Genre", icon: Icons.local_fire_department),
           const SizedBox(height: 16),
 
-          // DATE PICKER
           GestureDetector(
             onTap: pickDate,
             child: AbsorbPointer(
@@ -102,16 +157,9 @@ class _AddListPageState extends State<AddListPage> {
             keyboardType: TextInputType.number,
             validator: (v) {
               if (v == null || v.isEmpty) return null;
-
               final value = int.tryParse(v);
-
-              if (value == null) {
-                return "Episode harus berupa angka";
-              }
-              if (value <= 0) {
-                return "Episode harus lebih dari 0";
-              }
-
+              if (value == null) return "Episode harus berupa angka";
+              if (value <= 0) return "Episode harus lebih dari 0";
               return null;
             },
           ),
@@ -156,7 +204,7 @@ class _AddListPageState extends State<AddListPage> {
       style: const TextStyle(color: Colors.white),
       decoration: _inputDecoration(label: label, icon: icon),
       validator: requiredField
-          ? (v) => v!.isEmpty ? "$label tidak boleh kosong" : null
+          ? (v) => (v == null || v.isEmpty) ? "$label tidak boleh kosong" : null
           : null,
     );
   }
@@ -179,28 +227,33 @@ class _AddListPageState extends State<AddListPage> {
     );
   }
 
-  Widget _submitButton() {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.black,
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        elevation: 4,
-      ),
-      onPressed: saveData,
-      child: const Text(
-        "Simpan",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+  Widget _submitButton(bool isEditMode) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.black,
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          elevation: 4,
+        ),
+        onPressed: saveData,
+        child: Text(
+          isEditMode ? "Simpan Perubahan" : "Simpan Jadwal",
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
 
   Future<void> pickDate() async {
     final now = DateTime.now();
+    final initial = selectedDate ?? now;
+
     final result = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: initial,
       firstDate: DateTime(2000),
       lastDate: DateTime(now.year + 5),
       builder: (context, child) => Theme(
@@ -228,20 +281,34 @@ class _AddListPageState extends State<AddListPage> {
       );
     }
 
+    final isEditMode = widget.itemToEdit != null;
     final item = WatchItem(
+      id: isEditMode ? widget.itemToEdit!.id : '',
       title: _title.text,
       type: _type.text,
       genre: _genre.text,
       date: dateFormat.format(selectedDate!),
-      isWatched: false,
+      isWatched: isEditMode ? widget.itemToEdit!.isWatched : false,
+      currentEpisode: isEditMode ? widget.itemToEdit!.currentEpisode : 0,
       episodes: _episodes.text.isEmpty ? null : int.tryParse(_episodes.text),
-      currentEpisode: 0,
     );
 
-    int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(
-      100000,
-    );
-    await context.read<DaftarProvider>().addItem(item);
+    try {
+      if (isEditMode) {
+        await context.read<DaftarProvider>().updateItem(item);
+      } else {
+        await context.read<DaftarProvider>().addItem(item);
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal menyimpan: $e")),
+      );
+      return;
+    }
+
+    int notificationId = DateTime.now().millisecondsSinceEpoch.remainder(100000);
+    
     final now = DateTime.now();
     DateTime scheduleTime;
 
@@ -249,25 +316,25 @@ class _AddListPageState extends State<AddListPage> {
         selectedDate!.year == now.year &&
         selectedDate!.month == now.month &&
         selectedDate!.day == now.day;
-    //set 10 second untuk demo
+        
     if (isToday) {
+      // Demo: Jika hari ini, bunyi 10 detik lagi
       scheduleTime = now.add(const Duration(seconds: 10));
     } else {
+      // Jika tidak notifikasi muncul jam 9 pagi
       scheduleTime = DateTime(
         selectedDate!.year,
         selectedDate!.month,
         selectedDate!.day,
-        9,
-        0,
-        0,
+        9, 0, 0,
       );
     }
 
     if (scheduleTime.isAfter(now) && hasPermission) {
       await _notifService.scheduleNotification(
         id: notificationId,
-        title: "Waktunya Nonton! 🎬",
-        body: "Jangan lupa nonton ${_title.text} sesuai jadwalmu.",
+        title: isEditMode ? "Jadwal Diubah! 🎬" : "Waktunya Nonton! 🎬",
+        body: "Jangan lupa nonton ${_title.text} pada jadwal barumu.",
         scheduledTime: scheduleTime,
       );
     }
@@ -277,7 +344,9 @@ class _AddListPageState extends State<AddListPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          "Disimpan! FPengingat set: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}",
+          isEditMode 
+            ? "Jadwal diperbarui! Notif: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}"
+            : "Disimpan! Notif: ${DateFormat('dd MMM HH:mm').format(scheduleTime)}",
         ),
         duration: const Duration(seconds: 3),
       ),

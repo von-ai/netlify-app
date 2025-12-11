@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_mobile/pages/detail_page.dart';
-import '../../models/watch_item.dart';
-import '../../core/theme/colors.dart';
+import 'package:project_mobile/models/watch_item.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class EventCardList extends StatelessWidget {
   final List<WatchItem> items;
@@ -114,7 +114,6 @@ class EventCardList extends StatelessWidget {
                               fontSize: 13,
                             ),
                           ),
-
                           if (item.mood != null && item.mood!.isNotEmpty) ...[
                             const SizedBox(width: 10),
                             Icon(
@@ -145,9 +144,8 @@ class EventCardList extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                               child: LinearProgressIndicator(
                                 value: progress,
-                                backgroundColor: AppColors.textDark.withOpacity(
-                                  0.15,
-                                ),
+                                backgroundColor:
+                                    AppColors.textDark.withOpacity(0.15),
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   AppColors.primary,
                                 ),

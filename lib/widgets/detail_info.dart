@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import '../core/theme/colors.dart';
+import 'package:project_mobile/core/theme/colors.dart';
 
 class DetailInfo extends StatelessWidget {
   final String genre;
   final String date;
   final bool isWatched;
   final int? episodes;
+  
+  final VoidCallback? onEditPressed;
 
   const DetailInfo({
     super.key,
@@ -13,6 +15,7 @@ class DetailInfo extends StatelessWidget {
     required this.date,
     required this.isWatched,
     this.episodes,
+    this.onEditPressed,
   });
 
   @override
@@ -27,6 +30,23 @@ class DetailInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Informasi Detail",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          
+          const Divider(color: Colors.white10, height: 24),
+
           _infoRow("Genre", genre),
           const SizedBox(height: 12),
           _infoRow("Tanggal Rilis", date),
