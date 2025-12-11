@@ -72,7 +72,7 @@ class NotificationService {
         day: scheduledTime.day,
         hour: scheduledTime.hour,
         minute: scheduledTime.minute,
-        second: 0,
+        second: scheduledTime.second,
         millisecond: 0,
         timeZone: localTimeZone,
         preciseAlarm: true,
