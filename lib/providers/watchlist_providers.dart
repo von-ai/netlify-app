@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/watch_item.dart';
-import '../services/watchlist_service.dart';
+import 'package:project_mobile/models/watch_item.dart';
+import 'package:project_mobile/services/watchlist_service.dart';
 
 class WatchlistProvider with ChangeNotifier {
   final WatchlistService _service = WatchlistService();

@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/watch_item.dart';
+import 'package:project_mobile/models/watch_item.dart';
 
 class FirestoreService {
   final _db = FirebaseFirestore.instance;

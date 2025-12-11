@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import '../models/watch_item.dart';
-import '../services/watchlist_service.dart';
+import 'package:project_mobile/models/watch_item.dart';
+import 'package:project_mobile/services/watchlist_service.dart';
 
 class DetailProvider extends ChangeNotifier {
   final _service = WatchlistService();

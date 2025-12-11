@@ -21,6 +21,9 @@ class _DaftarPageState extends State<DaftarPage> {
   void initState() {
     super.initState();
     searchController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    Provider.of<DaftarProvider>(context, listen: false).loadItems();
+  });
   }
 
   @override
