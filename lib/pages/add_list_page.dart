@@ -332,7 +332,7 @@ class _AddListPageState extends State<AddListPage> {
     if (scheduleTime.isAfter(now) && hasPermission) {
       await _notifService.scheduleNotification(
         id: notificationId,
-        title: isEditMode ? "Jadwal Diubah! 🎬" : "Waktunya Nonton! 🎬",
+        title: isEditMode ? "Waktunya Nonton! 🎬" : "Waktunya Nonton! 🎬",
         body: "Jangan lupa nonton ${_title.text} pada jadwal barumu.",
         scheduledTime: scheduleTime,
       );
